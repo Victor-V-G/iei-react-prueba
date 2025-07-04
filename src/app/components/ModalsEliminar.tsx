@@ -6,8 +6,11 @@ const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     if (!isOpen) return null
 
   return (
-    <div>
-        <h1 className="ModalsStyle">MODALS ELIMINAR</h1>
+    <div className="ModalsBox">
+      <div className="ModalsContent">
+        <h1>MODALS ELIMINAR</h1>
+        <button onClick={closeModal}>Cerrar</button>
+      </div>
     </div>
   )
 }

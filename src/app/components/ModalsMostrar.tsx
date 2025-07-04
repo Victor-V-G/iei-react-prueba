@@ -6,8 +6,11 @@ const ModalsMostrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     if (!isOpen) return null
 
   return (
-    <div>
-        <h1 className="ModalsStyle">MODALS MOSTRAR</h1>
+    <div className="ModalsBox">
+      <div className="ModalsContent">
+        <h1>MODALS MOSTRAR</h1>
+        <button onClick={closeModal}>Cerrar</button>
+      </div>
     </div>
   )
 }

@@ -37,7 +37,7 @@ export default function Home() {
               </button>
               <ModalsMostrar
                 isOpen={IsModalOpenMostrar}
-                closeModal={()=>setIsModalOpenMostrar(true)}
+                closeModal={()=>setIsModalOpenMostrar(false)}
               />
             </ul>
             <ul>
@@ -46,7 +46,7 @@ export default function Home() {
               </button>
               <ModalsEditar
                 isOpen={IsModalOpenEditar}
-                closeModal={()=>setIsModalOpenEditar(true)}
+                closeModal={()=>setIsModalOpenEditar(false)}
               />
             </ul>
             <ul>
@@ -55,7 +55,7 @@ export default function Home() {
               </button>
               <ModalsEliminar
                 isOpen={IsModalOpenEliminar}
-                closeModal={()=>setIsModalOpenEliminar(true)}
+                closeModal={()=>setIsModalOpenEliminar(false)}
               />
             </ul>
           </nav>

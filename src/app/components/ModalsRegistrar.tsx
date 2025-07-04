@@ -6,8 +6,11 @@ const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     if (!isOpen) return null
 
   return (
-    <div>
-        <h1 className="ModalsStyle">MODALS REGISTRAR</h1>
+    <div className="ModalsBox">
+      <div className="ModalsContent">
+        <h1>MODALS REGISTRAR</h1>
+        <button onClick={closeModal}>Cerrar</button>
+      </div>
     </div>
   )
 }
