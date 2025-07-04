@@ -1,0 +1,17 @@
+
+Mi SPA simula el gestor de eventos que permitirá registrar y gestionar 
+los eventos a realizar de una organizacion que se dedica a realizar
+eventos de bootcamp sobre Web Developer. 
+
+Cada evento incluirá campos como nombre del evento, 
+número de participantes, categoría, descripción y fecha a realizar. 
+
+La aplicación permitirá crear nuevos eventos,
+
+una vez creados se decide si se visualizaran en la pagina principal en 
+una lista clara,
+
+editarlos cuando haya cambios y eliminarlos cuando ya no sean necesarios. 
+
+Toda la información se almacenará en Local Storage para asegurar 
+la persistencia sin conexión a internet.

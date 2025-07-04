@@ -8,9 +8,8 @@
 
 html{
     height: 100%;
-    background: #283048;  /* fallback for old browsers */
-    background: linear-gradient(to right, #859398, #283048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: -webkit-linear-gradient(to right, #859398, #283048);  /* Chrome 10-25, Safari 5.1-6 */
+    background: #242323;
+    background: radial-gradient(circle, rgba(36, 35, 35, 1) 0%, rgba(36, 35, 35, 1) 35%, rgba(36, 35, 35, 1) 100%);
 }   
 
 body{
@@ -29,11 +28,12 @@ body{
 
 .header{
     grid-area: header;
-
+    margin-top: 20px;
 }
 
 .main{
     grid-area: main;
+    margin-top: 10%;
 }
 
 .footer{
@@ -53,4 +53,26 @@ body{
 
 html {
   font-family: 'General Sans', sans-serif;
+}
+
+.headerBox{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.listaBotones{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.eventosARealizar{
+    display: flex;
+    margin-top: 10%;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50%;
 }
