@@ -78,6 +78,7 @@ const ComponenteRegistrarDatosEvento = ()=> {
             <button
                 onClick={()=>handleRegistrarEventos()}> REGISTRAR EVENTO
             </button> <br />
+
         </form>
     )
 }

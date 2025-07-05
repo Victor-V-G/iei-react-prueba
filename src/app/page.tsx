@@ -9,7 +9,7 @@ import ModalsMostrar from './components/ModalsMostrar';
 import ModalsEditar from './components/ModalsEditar';
 import ModalsEliminar from './components/ModalsEliminar';
 import { InterfaceDatosEventos } from './interfaces/InterfaceDatosEventos';
-
+import { ComponenteMostrarDatos } from './components/ComponenteMostrarDatos'
 
 
 export default function Home() {
@@ -33,15 +33,6 @@ export default function Home() {
               <ModalsRegistrar 
                 isOpen={IsModalOpenRegistrar} 
                 closeModal={()=>setIsModalOpenRegistrar(false)}
-              />
-            </ul>
-            <ul>
-              <button
-                onClick={()=>setIsModalOpenMostrar(true)}>MOSTRAR
-              </button>
-              <ModalsMostrar
-                isOpen={IsModalOpenMostrar}
-                closeModal={()=>setIsModalOpenMostrar(false)}
               />
             </ul>
             <ul>
@@ -71,7 +62,8 @@ export default function Home() {
         <h3 className={styles.subtituloPresentacionFont}>Ofrecemos Bootcamp intensivo en Front-End, Back-End y Full Stack <br /> alrededor de todo Chile para impulsar tu carrera digital.</h3> <br />
         <div className='eventosARealizar'>
           <h3 className={styles.subtituloEventosARealizar}>EVENTOS A REALIZAR:</h3>
-          <div className='mostrarEventos'>
+          <div className={styles.subtituloEventosARealizar}>
+            <ComponenteMostrarDatos/>
           </div>
         </div>
       </main>
