@@ -11,11 +11,25 @@ const initialStateDatosEventos: InterfaceDatosEventos={
 const RegistrarDatosEvento = ()=> {
     const miStorage = window.localStorage
     const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
+    const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+
+    useEffect(() => {
+        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+        if (ListaStr != null){
+            let ListaParse = JSON.parse(ListaStr)
+            setAlmacenarDatosEventos(ListaParse)
+        }
+    }, [])
+    
 
     const handleDatosEventos = (name:string,value:string)=>{
         setDatosEventos(
             {...DatosEventos,[name]:value}
         )
+    }
+
+    const handleRegistrarEventos = ()=>{
+        miStorage.setItem("AlmacenarDatosEventos",JSON.stringify([...AlmacenarDatosEventos,DatosEventos]))
     }
 
     return (
@@ -32,7 +46,10 @@ const RegistrarDatosEvento = ()=> {
                 name="cantidadDeCupos"
                 placeholder="CANTIDAD DE CUPOS"
                 onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
-            />
+            /> <br />
+            <button
+                onClick={()=>handleRegistrarEventos()}> REGISTRAR EVENTO
+            </button>
         </form>
     )
 }
