@@ -1,7 +1,7 @@
 import React from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
 import './modals.styles.css'
-import RegistrarDatosEvento from './RegistrarEvento'
+import ComponenteRegistrarDatosEvento from './ComponenteRegistrarEvento'
 
 const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     if (!isOpen) return null
@@ -10,7 +10,7 @@ const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     <div className="ModalsBox">
       <div className="ModalsContent">
         <h1>MODALS REGISTRAR</h1>
-        <RegistrarDatosEvento/>
+        <ComponenteRegistrarDatosEvento/>
         <button onClick={closeModal}>Cerrar</button>
       </div>
     </div>
