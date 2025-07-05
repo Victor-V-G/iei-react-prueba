@@ -5,19 +5,17 @@ import styles from './page.module.css'
 import './globals.css';
 import { useEffect, useState } from 'react';
 import ModalsRegistrar from './components/ModalsRegistrar';
-import ModalsMostrar from './components/ModalsMostrar';
 import ModalsEditar from './components/ModalsEditar';
 import ModalsEliminar from './components/ModalsEliminar';
 import { InterfaceDatosEventos } from './interfaces/InterfaceDatosEventos';
 import { ComponenteMostrarDatos } from './components/ComponenteMostrarDatos'
 
 
+
 export default function Home() {
   const [IsModalOpenRegistrar, setIsModalOpenRegistrar] = useState(false)
-  const [IsModalOpenMostrar, setIsModalOpenMostrar] = useState(false)
   const [IsModalOpenEditar, setIsModalOpenEditar] = useState(false)
   const [IsModalOpenEliminar, setIsModalOpenEliminar] = useState(false)
-
 
   return (
     <div className="grid-container">
