@@ -2,5 +2,5 @@
 import { InterfaceDatosEventos } from "./InterfaceDatosEventos"
 
 export interface TraerDatosProps{
-    traerDatos: (d: InterfaceDatosEventos) => void
+    traerDatos: (d: InterfaceDatosEventos, index: number) => void
 }

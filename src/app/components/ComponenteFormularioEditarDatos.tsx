@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos"
-import ComponenteRecuperarDatos from "./ComponenteRecuperarDatos"
+import ComponenteRecuperarDatosEditar from "./ComponenteRecuperarDatosEditar"
 
 const initialStateDatosEventos: InterfaceDatosEventos={
     nombreDelEvento: "",
@@ -16,6 +16,7 @@ const ComponenteFormularioEditarDatos = ()=> {
     const miStorage = window.localStorage
     const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+    const [indexFila, setIndexFila] = useState<number | null>(null);
 
     useEffect(() => {
         let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
@@ -32,18 +33,26 @@ const ComponenteFormularioEditarDatos = ()=> {
         )
     }
 
-    const handleRegistrarEventos = ()=>{
-        miStorage.setItem("AlmacenarDatosEventos",JSON.stringify([...AlmacenarDatosEventos,DatosEventos]))
+    const handleRegistrarEventos = () => {
+        let nuevaLista = [...AlmacenarDatosEventos]
+        if (indexFila !== null) {
+            nuevaLista[indexFila] = DatosEventos;
+        }
+        setAlmacenarDatosEventos(nuevaLista);
+        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista));
+        setDatosEventos(initialStateDatosEventos);
+        setIndexFila(null);
     }
 
-    const handleEditarEventos = (d:InterfaceDatosEventos)=>{
-        setDatosEventos(d)
+    const handleEditarEventos = (d:InterfaceDatosEventos, index:number)=>{
+        setDatosEventos(d);
+        setIndexFila(index);
     }
 
     return (
         <div>
 
-            <ComponenteRecuperarDatos traerDatos={handleEditarEventos}/>
+            <ComponenteRecuperarDatosEditar traerDatos={handleEditarEventos}/>
 
             <form>
                 <h1>EDITAR EVENTOS</h1>

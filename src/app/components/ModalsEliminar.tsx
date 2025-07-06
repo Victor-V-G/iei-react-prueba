@@ -3,7 +3,9 @@ import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
 import './modals.styles.css'
 
 const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
-    if (!isOpen) return null
+    if (!isOpen) {
+      return null
+    } 
 
   return (
     <div className="ModalsBox">

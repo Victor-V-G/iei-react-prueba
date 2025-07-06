@@ -4,7 +4,9 @@ import './modals.styles.css'
 import ComponenteRegistrarDatosEvento from './ComponenteRegistrarEvento'
 
 const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
-    if (!isOpen) return null
+    if (!isOpen){
+      return null
+    } 
 
   return (
     <div className="ModalsBox">

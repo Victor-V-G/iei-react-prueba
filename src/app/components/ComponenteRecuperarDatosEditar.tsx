@@ -6,7 +6,7 @@ import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
 import { TraerDatosProps } from "../interfaces/InterfaceTraerDatosProps";
 import './modals.styles.css'
 
-export const ComponenteRecuperarDatos = (propsDatos:TraerDatosProps) =>{
+export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
     const miStorage = window.localStorage
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
 
@@ -19,7 +19,7 @@ export const ComponenteRecuperarDatos = (propsDatos:TraerDatosProps) =>{
     }, [])
 
     const componenteEditar = (index:number)=>{
-        propsDatos.traerDatos(AlmacenarDatosEventos[index])
+        propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
     }
 
 
@@ -51,4 +51,4 @@ export const ComponenteRecuperarDatos = (propsDatos:TraerDatosProps) =>{
     );
 }
 
-export default ComponenteRecuperarDatos;
+export default ComponenteRecuperarDatosEditar;
