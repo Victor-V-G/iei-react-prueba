@@ -19,12 +19,15 @@ export const ComponenteRecuperarDatosEliminar = (propsDatos:TraerDatosProps) =>{
     }, [])
 
     const componenteEliminar = (index: number) => {
-        let nuevaLista = [...AlmacenarDatosEventos]
-        nuevaLista.splice(index, 1)
-        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista)) 
-        setAlmacenarDatosEventos(nuevaLista)  
-        window.location.reload()       
-    }
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?");
+        if (confirmar) {
+            let nuevaLista = [...AlmacenarDatosEventos];
+            nuevaLista.splice(index, 1);
+            miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista));
+            setAlmacenarDatosEventos(nuevaLista);
+            window.location.reload();
+        }
+    };
 
     return ( 
         <>

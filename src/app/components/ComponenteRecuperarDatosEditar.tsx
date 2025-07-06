@@ -18,9 +18,12 @@ export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
         }
     }, [])
 
-    const componenteEditar = (index:number)=>{
-        propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
-    }
+    const componenteEditar = (index: number) => {
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
+        if (confirmar) {
+            propsDatos.traerDatos(AlmacenarDatosEventos[index], index);
+        }
+    };
 
 
     return ( 
