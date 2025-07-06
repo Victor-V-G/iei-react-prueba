@@ -16,6 +16,11 @@ const ComponenteRegistrarDatosEvento = ()=> {
     const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
 
+    const [MostrarErrorNombreDelEvento, setMostrarErrorNombreDelEvento] = useState("")
+    
+    const [validarNombre, setValidarNombre] = useState(false)
+
+
     useEffect(() => {
         let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
         if (ListaStr != null){
@@ -23,27 +28,39 @@ const ComponenteRegistrarDatosEvento = ()=> {
             setAlmacenarDatosEventos(ListaParse)
         }
     }, [])
-    
 
-    const handleDatosEventos = (name:string,value:string)=>{
-        setDatosEventos(
-            {...DatosEventos,[name]:value}
-        )
+    const handleDatosEventos = (name: string, value: string) => {
+        const nuevoDatos = { ...DatosEventos, [name]: value }
+        setDatosEventos(nuevoDatos)
+
+        if (nuevoDatos.nombreDelEvento.length < 5) {
+            setMostrarErrorNombreDelEvento("EL CAMPO DEBE CONTENER MAS DE 4 CARACTERES")
+            setValidarNombre(false)
+        } else if (nuevoDatos.nombreDelEvento.match(/\d/)){
+            setMostrarErrorNombreDelEvento("EL CAMPO NO PUEDE TENER CARACTERES NUMERICOS")
+            setValidarNombre(false)
+        } else {
+            setMostrarErrorNombreDelEvento("")
+            setValidarNombre(true)
+        }
+
+
     }
 
-    const handleRegistrarEventos = ()=>{
-        miStorage.setItem("AlmacenarDatosEventos",JSON.stringify([...AlmacenarDatosEventos,DatosEventos]))
+    const handleRegistrarEventos = () => {
+        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify([...AlmacenarDatosEventos, DatosEventos]))
     }
 
     return (
         <form>
-            <h1>EVENTOS REGISTRADOS: {DatosEventos.nombreDelEvento} {DatosEventos.cantidadDeCupos} </h1>
+            <h1>REGISTRAR EVENTOS</h1>
             <input 
                 type="text" 
                 name="nombreDelEvento" 
                 placeholder="NOMBRE DEL EVENTO"
                 onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
             /> <br />
+            <span>{MostrarErrorNombreDelEvento}</span> <br />
             <input 
                 type="number"
                 name="cantidadDeCupos"
@@ -76,6 +93,7 @@ const ComponenteRegistrarDatosEvento = ()=> {
             /> <br />
             <br />
             <button
+                disabled={!validarNombre}
                 onClick={()=>handleRegistrarEventos()}> REGISTRAR EVENTO
             </button> <br />
 

@@ -3,11 +3,10 @@
 
 import styles from './page.module.css'
 import './globals.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ModalsRegistrar from './components/ModalsRegistrar';
 import ModalsEditar from './components/ModalsEditar';
 import ModalsEliminar from './components/ModalsEliminar';
-import { InterfaceDatosEventos } from './interfaces/InterfaceDatosEventos';
 import { ComponenteMostrarDatos } from './components/ComponenteMostrarDatos'
 
 
