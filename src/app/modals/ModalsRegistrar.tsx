@@ -1,7 +1,7 @@
 import React from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
+import ComponenteRegistrarDatosEvento from '../components/ComponenteRegistrarEvento'
 import './modals.styles.css'
-import ComponenteRegistrarDatosEvento from './ComponenteRegistrarEvento'
 
 const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     if (!isOpen){

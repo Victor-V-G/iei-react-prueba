@@ -4,9 +4,9 @@
 import styles from './page.module.css'
 import './globals.css';
 import { useState } from 'react';
-import ModalsRegistrar from './components/ModalsRegistrar';
-import ModalsEditar from './components/ModalsEditar';
-import ModalsEliminar from './components/ModalsEliminar';
+import ModalsRegistrar from './modals/ModalsRegistrar';
+import ModalsEditar from './modals/ModalsEditar';
+import ModalsEliminar from './modals/ModalsEliminar';
 import { ComponenteMostrarDatos } from './components/ComponenteMostrarDatos'
 
 

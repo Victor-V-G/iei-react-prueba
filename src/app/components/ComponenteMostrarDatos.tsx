@@ -3,7 +3,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
-import './modals.styles.css'
+
 
 export const ComponenteMostrarDatos = () =>{
     const miStorage = window.localStorage

@@ -3,10 +3,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
-import { TraerDatosProps } from "../interfaces/InterfaceTraerDatosProps";
-import './modals.styles.css'
 
-export const ComponenteRecuperarDatosEliminar = (propsDatos:TraerDatosProps) =>{
+
+export const ComponenteRecuperarDatosEliminar = () =>{
     const miStorage = window.localStorage
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
 
@@ -19,13 +18,13 @@ export const ComponenteRecuperarDatosEliminar = (propsDatos:TraerDatosProps) =>{
     }, [])
 
     const componenteEliminar = (index: number) => {
-        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?");
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?")
         if (confirmar) {
-            let nuevaLista = [...AlmacenarDatosEventos];
-            nuevaLista.splice(index, 1);
-            miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista));
-            setAlmacenarDatosEventos(nuevaLista);
-            window.location.reload();
+            let nuevaLista = [...AlmacenarDatosEventos]
+            nuevaLista.splice(index, 1)
+            miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista))
+            setAlmacenarDatosEventos(nuevaLista)
+            window.location.reload()
         }
     };
 

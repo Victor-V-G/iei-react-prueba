@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
-import ComponenteFormularioEditarDatos from './ComponenteFormularioEditarDatos'
+import ComponenteFormularioEditarDatos from '../components/ComponenteFormularioEditarDatos'
 import './modals.styles.css'
 
 const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {

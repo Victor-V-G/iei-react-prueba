@@ -4,7 +4,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
 import { TraerDatosProps } from "../interfaces/InterfaceTraerDatosProps";
-import './modals.styles.css'
+
 
 export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
     const miStorage = window.localStorage
@@ -19,9 +19,9 @@ export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
     }, [])
 
     const componenteEditar = (index: number) => {
-        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?")
         if (confirmar) {
-            propsDatos.traerDatos(AlmacenarDatosEventos[index], index);
+            propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
         }
     };
 
