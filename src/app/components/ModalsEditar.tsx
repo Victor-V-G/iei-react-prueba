@@ -1,21 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
 import ComponenteFormularioEditarDatos from './ComponenteFormularioEditarDatos'
 import './modals.styles.css'
 
+const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
+  const [hayDatos, setHayDatos] = useState(false)
 
-const ModalsEditar = ({isOpen, closeModal}: InterfaceModalsProps) => {
-    if (!isOpen) return null
+  useEffect(() => {
+    if (!isOpen) return
 
-  return (
-    <div className="ModalsBox">
-      <div className="ModalsContent">
-        <h1>MODALS EDITAR</h1>
-        <ComponenteFormularioEditarDatos/>
-        <button onClick={closeModal}>Cerrar</button>
+    const miStorage = window.localStorage
+    let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+    let ListaParse = []
+
+    if (ListaStr != null) {
+      ListaParse = JSON.parse(ListaStr)
+    } else {
+      ListaParse = []
+    }
+    if (ListaParse.length > 0) {
+      setHayDatos(true)
+    } else {
+      setHayDatos(false)
+    }
+  }, [isOpen])
+
+  if (!isOpen){
+    return null
+  }
+
+  if (hayDatos) {
+    return (
+      <div className="ModalsBox">
+        <div className="ModalsContent">
+          <h1>MODALS EDITAR</h1>
+          <ComponenteFormularioEditarDatos />
+          <button onClick={closeModal}>Cerrar</button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className="ModalsBox">
+        <div className="ModalsContent">
+          <h1>MODALS EDITAR</h1>
+          <p>No hay datos para editar</p>
+          <button onClick={closeModal}>Cerrar</button>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default ModalsEditar
