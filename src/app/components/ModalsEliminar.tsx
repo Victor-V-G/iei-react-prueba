@@ -1,5 +1,6 @@
 import React from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
+import ComponenteRecuperarDatosEliminar from './ComponenteRecuperarDatosEliminar'
 import './modals.styles.css'
 
 const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
@@ -11,6 +12,7 @@ const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     <div className="ModalsBox">
       <div className="ModalsContent">
         <h1>MODALS ELIMINAR</h1>
+        <ComponenteRecuperarDatosEliminar traerDatos={() => {}}/>
         <button onClick={closeModal}>Cerrar</button>
       </div>
     </div>
