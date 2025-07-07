@@ -24,7 +24,7 @@ export default function Home() {
           <h1 className={styles.headerFont}>GESTOR DE EVENTOS</h1>
           <nav className="listaBotones">
             <ul>
-              <button 
+              <button className={styles.buttonStyle}
                 onClick={()=>setIsModalOpenRegistrar(true)}>REGISTRAR
               </button>
               <ModalsRegistrar 
@@ -33,7 +33,7 @@ export default function Home() {
               />
             </ul>
             <ul>
-              <button
+              <button className={styles.buttonStyle}
                 onClick={()=>setIsModalOpenEditar(true)}>EDITAR
               </button>
               <ModalsEditar
@@ -42,7 +42,7 @@ export default function Home() {
               />
             </ul>
             <ul>
-              <button
+              <button className={styles.buttonStyle}
                 onClick={()=>setIsModalOpenEliminar(true)}>ELIMINAR
               </button>
               <ModalsEliminar

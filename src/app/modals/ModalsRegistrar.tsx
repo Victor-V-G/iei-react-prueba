@@ -10,7 +10,7 @@ const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
     return (
       <div className="ModalsBox">
         <div className="ModalsContent">
-          <h1>MODALS REGISTRAR</h1>
+          <h1>MENÚ</h1>
           <ComponenteRegistrarDatosEvento/>
           <button onClick={closeModal}>Cerrar</button>
         </div>

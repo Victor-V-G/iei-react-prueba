@@ -125,7 +125,8 @@ const ComponenteFormularioEditarDatos = ()=> {
             <ComponenteRecuperarDatosEditar traerDatos={handleEditarEventos}/>
 
             <form>
-                <h1>EDITAR EVENTOS</h1>
+                <h1>CAMPOS A EDITAR</h1>
+                <label>NOMBRE DEL EVENTO</label> <br />
                 <input 
                     type="text" 
                     name="nombreDelEvento" 
@@ -133,6 +134,7 @@ const ComponenteFormularioEditarDatos = ()=> {
                     onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
                 /> <br />
                 <span>{MostrarErrorNombreDelEvento}</span> <br />
+                <label>CANTIDAD DE CUPOS</label> <br />
                 <input 
                     type="number"
                     name="cantidadDeCupos"
@@ -140,7 +142,7 @@ const ComponenteFormularioEditarDatos = ()=> {
                     onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
                 /> <br />
                 <span>{MostrarErrorCantidadDeCupos}</span> <br />
-                <label htmlFor="tipoDelEvento">ELIGE UN TIPO DE EVENTO</label> <br />
+                <label>TIPO DE EVENTO</label> <br />
                <select 
                     name="tipoDelEvento" 
                     id="tipoDelEvento"
@@ -151,6 +153,7 @@ const ComponenteFormularioEditarDatos = ()=> {
                     <option value="Full Stack">Full Stack</option>
                 </select> <br />
                 <span>{MostrarErrorTipoDelEvento}</span> <br />
+                <label>INFORMACION DEL EVENTO</label> <br />
                 <textarea
                     id="informacionDelEvento"
                     name="informacionDelEvento"

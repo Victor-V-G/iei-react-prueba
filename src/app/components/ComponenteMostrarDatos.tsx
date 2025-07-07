@@ -8,7 +8,7 @@ import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
 export const ComponenteMostrarDatos = () =>{
     const miStorage = window.localStorage
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
-
+    
     useEffect(() => {
         let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
         if (ListaStr != null){

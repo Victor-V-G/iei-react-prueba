@@ -106,18 +106,18 @@ const ComponenteRegistrarDatosEvento = ()=> {
 
     return (
         <form>
-            <h1>REGISTRAR EVENTOS</h1>
+            <h1>REGISTRAR EVENTOS</h1> <br />
+            <label>NOMBRE DEL EVENTO</label> <br />
             <input 
                 type="text" 
                 name="nombreDelEvento" 
-                placeholder="NOMBRE DEL EVENTO"
                 onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
             /> <br />
             <span>{MostrarErrorNombreDelEvento}</span> <br />
+            <label>CANTIDAD DE CUPOS</label> <br />
             <input 
                 type="number"
                 name="cantidadDeCupos"
-                placeholder="CANTIDAD DE CUPOS"
                 onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}
             /> <br />
             <span>{MostrarErrorCantidadDeCupos}</span> <br />
@@ -132,6 +132,7 @@ const ComponenteRegistrarDatosEvento = ()=> {
                 <option value="Full Stack">Full Stack</option>
             </select> <br />
             <span>{MostrarErrorTipoDelEvento}</span> <br />
+            <label>INFORMACION DEL EVENTO</label> <br />
             <textarea
                 id="informacionDelEvento"
                 name="informacionDelEvento"

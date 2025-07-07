@@ -1,7 +1,34 @@
 
+-----------------------------------------------------------------------------------------
 
-colocar flujo de datos, es decir este componente llama a este etc..
+EL COMMIT LLAMADO "FIREBASE IMPLEMENTADO" fue una confusion de repositorios
+pero el commit contiene el txt con el flujo de datos, y el
+funcionamiento de cada componente detallado sobre esta evaluacion.
 
+-----------------------------------------------------------------------------------------
+
+FLUJO DE DATOS:
+
+dentro de page.tsx encontramos el HEADER el cual llama a los componentes
+ModalsRegistrar / ModalsEditar / ModalsEliminar , estos componentes
+a su vez llaman a otros componentes en este orden: 
+
+ModalsRegistar => LLama a ComponenteRegistrarDatosEvento,
+
+ModalsEditar => Llama a ComponenteFormularioEditar => y este Llama a ComponenteRecuperarDatosEditar (para mostrar lo almacenado en LocalStorage)
+
+ModalsEliminar => Llama a ComponenteRecuperarDatosEditar (que este componente Muestra los datos en LocalStorage y pone el boton para eliminar,
+efectuando la eliminacion en el mismo componente)
+
+
+despues encontramos el MAIN el cual muestra los datos en LocalStorage, 
+
+llamando directamnete al Componente ComponenteMostrarDatos (que este muestra los datos
+almacenados en LocalStorage)
+
+-----------------------------------------------------------------------------------------
+
+EXPLICACION TECNICA (COMPONENTES, INTERFACES, MODALS)
 
 -----------------------------------------------------------------------------------------
 
@@ -509,7 +536,7 @@ en formulario Registrar/Eliminar, las cuales se mostraran a continuacion
 
 a partir de eso, en el return del componente, podemos retornar una tabla la cual tiene
 como contenido los datos Registrados/Editados almacenados en localStorage, todo gracias a 
-la funcion .map:
+la funcion .map que retorna una funcion flecha:
 
 return ( 
         <>
@@ -640,8 +667,16 @@ los datos que fueron eliminados), así se asegura que la
 eliminación sea clara, persistente y visible de inmediato para el usuario y el
 gestor de eventos.
 
+
 <button
   onClick={()=>componenteEliminar(index)}>ELIMINAR
 </button>
 
---comentar
+al final del return y la tabla que recupera el los datos esta el boton de eliminar
+que llama la funcion componenteEliminar y se le dice cuál evento borrar 
+usando su posición en la lista AlmacenarDatosEventos así, solo se elimina el 
+evento correcto y después se actualiza todo para que ya no aparezca.
+
+-----------------------------------------------------------------------------------------
+
+

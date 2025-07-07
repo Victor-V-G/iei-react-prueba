@@ -38,7 +38,7 @@ const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
       return (
         <div className="ModalsBox">
           <div className="ModalsContent">
-            <h1>MODALS ELIMINAR</h1>
+            <h1>MENÚ ELIMINAR</h1>
             <ComponenteRecuperarDatosEliminar/>
             <button onClick={closeModal}>Cerrar</button>
           </div>
@@ -48,7 +48,7 @@ const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
       return (
         <div className="ModalsBox">
           <div className="ModalsContent">
-            <h1>MODALS ELIMINAR</h1>
+            <h1>MENÚ ELIMINAR</h1>
             <p>No hay datos para eliminar</p>
             <button onClick={closeModal}>Cerrar</button>
           </div>

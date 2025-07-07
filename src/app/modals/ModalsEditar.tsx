@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
 import ComponenteFormularioEditarDatos from '../components/ComponenteFormularioEditarDatos'
 import './modals.styles.css'
+import styles from '../page.module.css'
 
 const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
   
@@ -35,7 +36,7 @@ const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
       return (
         <div className="ModalsBox">
           <div className="ModalsContent">
-            <h1>MODALS EDITAR</h1>
+            <h1>MENÚ EDITAR EVENTOS</h1>
             <ComponenteFormularioEditarDatos />
             <button onClick={closeModal}>Cerrar</button>
           </div>
@@ -45,7 +46,7 @@ const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
       return (
         <div className="ModalsBox">
           <div className="ModalsContent">
-            <h1>MODALS EDITAR</h1>
+            <h1>MENÚ EDITAR</h1>
             <p>No hay datos para editar</p>
             <button onClick={closeModal}>Cerrar</button>
           </div>
