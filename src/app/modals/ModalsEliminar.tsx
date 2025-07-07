@@ -5,52 +5,59 @@ import ComponenteRecuperarDatosEliminar from '../components/ComponenteRecuperarD
 import './modals.styles.css'
 
 const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
-     const [hayDatos, setHayDatos] = useState(false)
+     
+  const [hayDatos, setHayDatos] = useState(false)
 
   useEffect(() => {
-    if (!isOpen) return
-
-    const miStorage = window.localStorage
-    let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-    let ListaParse = []
-
-    if (ListaStr != null) {
-      ListaParse = JSON.parse(ListaStr)
+    if (isOpen != false) {
+      return
     } else {
-      ListaParse = []
+      const miStorage = window.localStorage
+      let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+      let ListaParse = []
+
+      if (ListaStr != null) {
+        ListaParse = JSON.parse(ListaStr)
+      } else {
+        ListaParse = []
+      }
+
+      if (ListaParse.length > 0) {
+        setHayDatos(true)
+      } else {
+        setHayDatos(false)
+      }
     }
-    if (ListaParse.length > 0) {
-      setHayDatos(true)
-    } else {
-      setHayDatos(false)
-    }
+
   }, [isOpen])
 
-  if (!isOpen){
+  if (isOpen != true){
     return null
+  } else {
+    if (hayDatos == true) {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS ELIMINAR</h1>
+            <ComponenteRecuperarDatosEliminar/>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS ELIMINAR</h1>
+            <p>No hay datos para eliminar</p>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )
+    }
   }
 
-  if (hayDatos) {
-    return (
-      <div className="ModalsBox">
-        <div className="ModalsContent">
-          <h1>MODALS ELIMINAR</h1>
-          <ComponenteRecuperarDatosEliminar/>
-          <button onClick={closeModal}>Cerrar</button>
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <div className="ModalsBox">
-        <div className="ModalsContent">
-          <h1>MODALS ELIMINAR</h1>
-          <p>No hay datos para eliminar</p>
-          <button onClick={closeModal}>Cerrar</button>
-        </div>
-      </div>
-    )
-  }
+  
 }
 
 export default ModalsEliminar

@@ -4,52 +4,56 @@ import ComponenteFormularioEditarDatos from '../components/ComponenteFormularioE
 import './modals.styles.css'
 
 const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
+  
   const [hayDatos, setHayDatos] = useState(false)
 
   useEffect(() => {
-    if (!isOpen) return
+    if (isOpen != false) 
+      return
+        const miStorage = window.localStorage
+        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+        let ListaParse = []
 
-    const miStorage = window.localStorage
-    let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-    let ListaParse = []
+        if (ListaStr != null) {
+          ListaParse = JSON.parse(ListaStr)
+        } else {
+          ListaParse = []
+        }
+    
+        if (ListaParse.length > 0) {
+          setHayDatos(true)
+        } else {
+          setHayDatos(false)
+        }
 
-    if (ListaStr != null) {
-      ListaParse = JSON.parse(ListaStr)
-    } else {
-      ListaParse = []
-    }
-    if (ListaParse.length > 0) {
-      setHayDatos(true)
-    } else {
-      setHayDatos(false)
-    }
   }, [isOpen])
 
-  if (!isOpen){
+  if (isOpen != true){
     return null
-  }
-
-  if (hayDatos) {
-    return (
-      <div className="ModalsBox">
-        <div className="ModalsContent">
-          <h1>MODALS EDITAR</h1>
-          <ComponenteFormularioEditarDatos />
-          <button onClick={closeModal}>Cerrar</button>
-        </div>
-      </div>
-    )
   } else {
-    return (
-      <div className="ModalsBox">
-        <div className="ModalsContent">
-          <h1>MODALS EDITAR</h1>
-          <p>No hay datos para editar</p>
-          <button onClick={closeModal}>Cerrar</button>
+    if (hayDatos) {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS EDITAR</h1>
+            <ComponenteFormularioEditarDatos />
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS EDITAR</h1>
+            <p>No hay datos para editar</p>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )
+    }
   }
+  
 }
 
 export default ModalsEditar

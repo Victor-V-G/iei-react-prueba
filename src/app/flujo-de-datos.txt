@@ -1,0 +1,647 @@
+
+
+colocar flujo de datos, es decir este componente llama a este etc..
+
+
+-----------------------------------------------------------------------------------------
+
+1- Modals: 
+
+los Modals implementados son en forma de ventana emergente donde el gestor
+de eventos pueda Registrar, Editar y Eliminar eventos
+desde su menu de gestion.
+
+-----------------------------------------------------------------------------------------
+
+Los Modals primero, fueron definidos en una interfaz donde define que
+
+(dentro de InterfaceModalsProps)
+
+isOpen: Boolean;  
+
+define que los parametros que se manejen tienen que
+ser Booleanos, es decir que si esta Abierto (true) o Cerrado (false) el Modals
+
+
+closeModal: () => void;  
+
+define que closeModal sea una funcion 
+vacia (buscando que cierre el Modals)
+
+
+-----------------------------------------------------------------------------------------
+
+Estructura y Logica:
+
+Componente Modals ya sea Registrar/Editar/Eliminar tiene esta estructura:
+
+(dentro del Componente Modals ya sea Registrar/Editar/Eliminar)
+Const ModalsRegistrar = ({isOpen, closeModal}: InterfaceModalsProps) => {
+}
+
+primero los Modals reciben los parametros ya definidos en la interfaz,
+
+antes de proceder al Modals, en la pagina principal Page.tsx, 
+esta definido mediante useState que:
+
+(dentro de page.tsx)
+const [IsModalOpenRegistrar, setIsModalOpenRegistrar] = useState(false)
+
+que isOpen adquiera su valor (true o false) mediante IsModalOpenRegistrar ya 
+esta predefinido como false (permitiendo que el modals no se muestre) 
+pero si se da click al boton REGISTRAR/EDITAR/ELIMINAR mediante 
+setIsModalOpenRegistrar se cambia el valor de IsModalOpenRegistrar 
+por true (permitiendo que el boton desplegue el Modals)
+
+y se llama al Componente del Modals
+
+(dentro de page.tsx)
+<ModalsRegistrar 
+    isOpen={IsModalOpenRegistrar} 
+    closeModal={()=>setIsModalOpenRegistrar(false)}
+/>
+
+y se asigna que isOpen toma el valor que se guardo en IsModalOpenRegistrar
+
+la funcion closeModal que era vacia, ahora permita que mediante 
+setIsModalOpenRegistrar defina IsModalOpenRegistrar como 
+false (es decir que esta Cerrado) y esta se pasa al Componente de ModalsRegistrar,
+
+una vez en el Componente de los Modals primero pasa una validacion con 
+los datos isOpen y la funcion closeModal ya definidos en page.tsx
+
+(dentro de los Componentes de Modals Registrar, Editar y Eliminar)
+if (isOpen != true){
+      return null
+} else {
+    return (
+      <div className="ModalsBox">
+        <div className="ModalsContent">
+          <h1>MODALS REGISTRAR</h1>
+          <ComponenteRegistrarDatosEvento/>
+          <button onClick={closeModal}>Cerrar</button>
+        </div>
+      </div>
+    )
+  } 
+
+esta validacion verifica primero que si isOpen es diferente a true 
+(recordando que isOpen esta definida como false en page.tsx) no renderiza/muestra nada
+mediante el return null (que seria como return ( <h1>texto<h1> ); pero no 
+devolviendo absolutamente nada gracias al null) es decir que no se muestra el Modals,
+pero si isOpen no es diferente a true, es decir isOpen fue definido como true 
+(se dio click al boton) pasa al else el cual retorna lo que se va a 
+mostrar (el modals y su estructura en si) dentro de la estructura se llama al
+Componente que maneja el formulario de registro de eventos y tambien
+se encuentra el boton para Cerrar el cual al ser presionado ejecuta la
+funcion previamente ya definida de closeModal en page.tsx:
+
+(funcion vacia definida en page.tsx)
+closeModal={()=>setIsModalOpenRegistrar(false)}
+
+entonces al dar click en cerrar se ejecuta esa funcion que se guardo en 
+closeModal cambiando el valor de IsModalOpenRegistrar a false por lo 
+que pasa de nuevo la validacion y isOpen sera false por lo 
+que return null cierra el Modals.
+
+(esta logica y estructura aplica para todos los 
+Modals implementados: Registrar, editar y eliminar)
+
+-Verificar si hay datos:
+
+en los modals de EDITAR y ELIMINAR mediante useEffect se detecta o (escucha) si 
+en localStorage esta el elemento AlmacenarDatosEventos mediante una validacion si 
+isOpen es true (es decir se abrio el modals) no ejecuta el useEffect, todo gracias 
+al return, pero si isOpen es false
+retorna una funcion que recupera los datos en miStorage a la variable ListaStr, la cual
+a la vez se crea la otra variable ListaParse dejando un array vacio, 
+la cual si ListaStr que recupero los items
+del LocalStorage es diferente a null (es decir si no esta vacia o mejor dicho 
+habian datos en localStorage) esta transforma a JSON la listaStr y la guarda en
+la variable ListaParse, pero si no habia nada en localStorage la variable ListaParse
+se mantiene vacia, despues de esto pasa a otra validacion que si ListaParse tiene datos:
+
+(en el componente de Modals Editar y Eliminar)
+const [hayDatos, setHayDatos] = useState(false)
+
+entonces llama a un useState Booleano que por defecto hayDatos esta en false, entonces
+si habian datos este Booleano se cambia a True mediante setHayDatos(true) (significando
+que si habian datos), pero si no habia nada es decir ListaParse seguia vacia como
+su estado inicial, entonces esta pasa al else y mantiene hayDatos como false,
+asi finalizando las validaciones, el useEffect se ejecuta cada vez que sus dependencias
+en este caso isOpen es false
+
+(useEffect en componente modals Editar y eliminar)
+  useEffect(() => {
+    if (isOpen != false) {
+      return
+    } else {
+      const miStorage = window.localStorage
+      let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+      let ListaParse = []
+
+      if (ListaStr != null) {
+        ListaParse = JSON.parse(ListaStr)
+      } else {
+        ListaParse = []
+      }
+
+      if (ListaParse.length > 0) {
+        setHayDatos(true)
+      } else {
+        setHayDatos(false)
+      }
+    }
+    
+  }, [isOpen])
+
+entonces vuelve a otra validacion que se complementa con la anterior:
+
+(en el componente Modals Editar y Eliminar)
+if (isOpen != true){
+    return null
+  } else {
+    if (hayDatos) {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS ELIMINAR</h1>
+            <ComponenteRecuperarDatosEliminar/>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="ModalsBox">
+          <div className="ModalsContent">
+            <h1>MODALS ELIMINAR</h1>
+            <p>No hay datos para eliminar</p>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )
+    }
+  }
+
+que si hayDatos es true entonces ejecuta el return con el Modals y el componente ya 
+sea de Editar o Eliminar, pero si hayDatos es false, entonces retorna el modals pero 
+sin el componente, diciendole al usuario que no habian datos para editar o eliminar
+-----------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------
+
+2- Componente Registrar y Editar (CompomenteRegistrarEvento y ComponenteFormularioEditar)
+
+El ComponenteRegistrarDatosEvento es el formulario principal encargado de permitir
+que el gestor de eventos pueda registrar nuevos eventos y guardarlos en el 
+almacenamiento local del navegador localStorage
+Este componente está diseñado para validar en tiempo real todos los datos 
+ingresados por el usuario y solo permitir el registro de eventos válidos
+
+-----------------------------------------------------------------------------------------
+
+Estructura y Logica Compartida:
+
+Dentro del componente se define un objeto initialStateDatosEventos 
+donde se especifica la estructura base del evento a registrar.
+
+(dentro del ComponenteRegistrarDatosEvento)
+const initialStateDatosEventos: InterfaceDatosEventos = {
+    nombreDelEvento: "",
+    cantidadDeCupos: 0,
+    tipoDelEvento: "",
+    informacionDelEvento: "",
+    fechaARealizarEvento: ""
+}
+
+Esto significa que cada vez que se use este componente, 
+los campos estarán vacíos o en cero para que se ingresen datos nuevos.
+
+pero antes se llama a la interfaz de DatosEventos (llamada InterfaceDatosEventos)
+la cual define que tipo de datos son, 
+
+(InterfaceDatosEventos)
+export interface InterfaceDatosEventos{
+    nombreDelEvento:string,
+    cantidadDeCupos:number,
+    tipoDelEvento:string,
+    informacionDelEvento:string,
+    fechaARealizarEvento:string
+},
+
+(dentro de los Componentes)
+Se define una serie de useState para gestionar:
+
+-Los datos del evento que se están ingresando (DatosEventos).
+
+const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
+
+DatosEventos adquiere los datos ya definidios en initialStateDatosEventos de 
+la InterfaceDatosEventos, Este estado almacena en tiempo real los valores que 
+el gestor de eventos va ingresando en cada campo del formulario.
+
+
+-La lista de todos los eventos almacenados previamente (AlmacenarDatosEventos).
+
+const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+
+AlmacenarDatosEventos es un arreglo que guarda todos los eventos que ya 
+han sido registrados anteriormente, cada elemento de este arreglo es un 
+objeto que cumple con la estructura definida por InterfaceDatosEventos 
+
+
+-Mensajes de error para cada 
+campo (MostrarErrorNombreDelEvento, MostrarErrorCantidadDeCupos, etc.).
+
+const [MostrarErrorNombreDelEvento, setMostrarErrorNombreDelEvento] = useState("")
+const [MostrarErrorCantidadDeCupos, setMostrarErrorCantidadDelEvento] = useState("")
+const [MostrarErrorTipoDelEvento, setMostrarErrorTipoDelEvento] = useState("")
+const [MostrarErrorInformacionDelEvento, setMostrarErrorInformacionDelEvento] = useState("")
+const [MostrarErrorFechaARealizarEvento, setMostrarErrorFechaARealizarEvento] = useState("")
+
+se definen estados de tipo cadena  "" (string) para cada mensaje de error
+Cada campo del formulario puede tener un mensaje de error específico, 
+dependiendo de si el valor ingresado cumple con la validación correspondiente,
+pero si todo está correcto, el mensaje de error se limpia y queda como cadena vacía.
+
+
+-Estados de validación para cada 
+campo (validarNombreDelEvento, validarCantidadDeCupos, etc.).
+
+const [validarNombreDelEvento, setValidarNombreDelEvento] = useState(false)
+const [validarCantidadDeCupos, setValidarCantidadDeCupos] = useState(false)
+const [validarTipoDelEvento, setValidarTipoDelEvento] = useState(false)
+const [validarInformacionDelEvento, setValidarInformacionDelEvento] = useState(false)
+const [validarFechaARealizarEvento, setValidarFechaARealizarEvento] = useState(false)
+
+Dentro del Componente se definen estados booleanos individuales para cada campo 
+del formulario, Cada estado de validación sirve para indicar si el dato ingresado 
+en ese campo es correcto o no.
+Por ejemplo, validarNombreDelEvento solo se vuelve true cuando el nombre 
+del evento cumple con todas las reglas establecidas (mínimo de caracteres, 
+sin números, etc.).
+
+Todos estos estados se inicializan en false porque antes de que el usuario 
+escriba algo, se asume que el formulario está incompleto o es inválido
+obligando al usuario a completar cada campo correctamente para que su 
+validación individual cambie a true., 
+
+(en ambos componentes)
+useEffect(() => {
+        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+        if (ListaStr != null){
+            let ListaParse = JSON.parse(ListaStr)
+            setAlmacenarDatosEventos(ListaParse)
+        }
+}, [])
+
+mediante useEffect se detecta o (escucha) si en localStorage existe el elemento 
+AlmacenarDatosEventos para traer los eventos ya
+guardados cuando se monta el componente se recupera la lista con
+miStorage.getItem, se verifica si es diferente de null (es decir, si hay datos) y 
+si es así se transforma con JSON.parse para guardarla en ListaParse y se actualiza 
+el estado AlmacenarDatosEventos con setAlmacenarDatosEventos(ListaParse). si no 
+hay datos, la lista queda como arreglo vacío. esto asegura que cada nuevo evento 
+se agregue sin borrar los anteriores, manteniendo sincronizados los datos locales 
+y el storage.,
+
+(en ambos Componentes)
+const handleDatosEventos = (name: string, value: string) => {
+        const nuevoDatos = { ...DatosEventos, [name]: value }
+        setDatosEventos(nuevoDatos)
+
+        if (nuevoDatos.nombreDelEvento.length < 5) {
+            setMostrarErrorNombreDelEvento("EL CAMPO DEBE CONTENER MAS DE 4 CARACTERES")
+            setValidarNombreDelEvento(false)
+        } else if (nuevoDatos.nombreDelEvento.match(/\d/)){
+            setMostrarErrorNombreDelEvento("EL CAMPO NO PUEDE TENER CARACTERES NUMERICOS")
+            setValidarNombreDelEvento(false)
+        } else {
+            setMostrarErrorNombreDelEvento("")
+            setValidarNombreDelEvento(true)
+        }
+
+
+        if (nuevoDatos.cantidadDeCupos < 5) {
+            setMostrarErrorCantidadDelEvento("Debe ingresar al menos 5 participante")
+            setValidarCantidadDeCupos(false)
+        } else if (nuevoDatos.cantidadDeCupos > 30) {
+            setMostrarErrorCantidadDelEvento("El máximo de participantes es 30")
+            setValidarCantidadDeCupos(false)
+        } else {
+            setMostrarErrorCantidadDelEvento("")
+            setValidarCantidadDeCupos(true)
+        }
+
+
+        if (nuevoDatos.tipoDelEvento === "") {
+            setMostrarErrorTipoDelEvento("Debe seleccionar un tipo de evento")
+            setValidarTipoDelEvento(false)
+        } else {
+            setMostrarErrorTipoDelEvento("")
+            setValidarTipoDelEvento(true)
+        }
+
+
+        if (nuevoDatos.informacionDelEvento.length < 10) {
+            setMostrarErrorInformacionDelEvento("EL CAMPO DEBE CONTENER MAS DE 10 CARACTERES")
+            setValidarInformacionDelEvento(false)
+        } else {
+            setMostrarErrorInformacionDelEvento("")
+            setValidarInformacionDelEvento(true)
+        }
+        
+
+        if (nuevoDatos.fechaARealizarEvento) {
+            const fechaActual = new Date()
+            fechaActual.setHours(0, 0, 0, 0)
+            const fechaIngresada = new Date(nuevoDatos.fechaARealizarEvento)
+
+            if (fechaIngresada < fechaActual) {
+                setMostrarErrorFechaARealizarEvento("LA FECHA NO PUEDE SER ANTERIOR A HOY")
+                setValidarFechaARealizarEvento(false)
+            } else {
+                setMostrarErrorFechaARealizarEvento("")
+                setValidarFechaARealizarEvento(true)
+            }
+        } else {
+            setMostrarErrorFechaARealizarEvento("DEBE INGRESAR UNA FECHA")
+            setValidarFechaARealizarEvento(false)
+        }
+    }
+
+la función handleDatosEventos se encarga de actualizar el estado DatosEventos cada 
+vez que el usuario cambia un campo del formulario, creando una copia del objeto 
+actual con el campo modificado. luego valida cada campo individualmente: 
+
+-para nombreDelEvento verifica que tenga más de 4 caracteres y que no contenga números, 
+mostrando mensajes de error y actualizando un estado booleano 
+de validación correspondiente
+-para cantidadDeCupos comprueba que sea entre 5 y 30 participantes 
+-para tipoDelEvento valida que no esté vacío
+-para informacionDelEvento verifica que tenga más de 10 caracteres
+-y para fechaARealizarEvento valida que exista y que no sea una fecha anterior 
+al día actual. 
+
+según cada validación actualiza los mensajes de error 
+correspondientes y los estados booleanos de validación que controlan si el campo 
+es válido o no. esto permite controlar en tiempo real la validez del formulario y 
+mostrar retroalimentación inmediata al usuario sobre errores o datos incorrectos.,
+
+
+
+-----------------------------------------------------------------------------------------
+
+Diferencias entre Componentes
+
+(en componente llamado ComponenteRegistrarDatosEvento)
+const handleRegistrarEventos = () => {
+        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify([...AlmacenarDatosEventos, DatosEventos]))
+    }
+
+la función handleRegistrarEventos se encarga de registrar el evento cuando 
+el usuario hace clic en el botón de guardar. toma todos los datos del formulario 
+guardados en DatosEventos y los agrega a la lista de eventos ya 
+existentes AlmacenarDatosEventos, luego convierte 
+esta lista actualizada a formato JSON con JSON.stringify y la guarda 
+en localStorage bajo la clave "AlmacenarDatosEventos" usando miStorage.setItem. 
+de esta forma, cada nuevo evento se suma a los registros anteriores sin 
+borrar ninguno, asegurando que la información quede guardada de forma persistente 
+para que se pueda recuperar la próxima vez que se abra el formulario o la aplicación.
+
+
+(en componente llamado ComponenteFormularioEditar)
+const [indexFila, setIndexFila] = useState<number | null>(null);
+
+la constante indexFila se declara como un estado que puede ser un número o null, 
+iniciando en null por defecto. sirve para guardar la posición (índice) de la fila de la 
+lista AlmacenarDatosEventos que se quiere editar. si indexFila tiene un valor numérico,
+significa que se está editando un evento específico en esa posición del arreglo; si 
+es null, significa que no se está editando nada y que el formulario está en modo registrar 
+nuevo evento. así se controla si la acción es registrar uno nuevo o actualizar uno 
+existente, dependiendo de si indexFila tiene un número o no.
+
+
+(en componente llamado ComponenteFormularioEditar)
+const handleRegistrarEventos = () => {
+        let nuevaLista = [...AlmacenarDatosEventos]
+        if (indexFila !== null) {
+            nuevaLista[indexFila] = DatosEventos;
+        }
+        setAlmacenarDatosEventos(nuevaLista);
+        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista));
+        setDatosEventos(initialStateDatosEventos);
+        setIndexFila(null);
+    }
+
+la función handleRegistrarEventos se encarga de actualizar 
+un evento existente. primero crea una copia de la lista AlmacenarDatosEventos para no 
+modificarla directamente. luego verifica si indexFila es distinto de null, lo que indica 
+que se está editando un evento; si es así reemplaza en la posición indexFila los datos 
+por los de DatosEventos. después actualiza el estado AlmacenarDatosEventos con la nueva 
+lista modificada y guarda esa lista actualizada en localStorage para que los cambios 
+sean persistentes. al final limpia el formulario dejando DatosEventos en su estado inicial 
+y vuelve indexFila a null para indicar que ya no se está editando ninguna fila.
+
+(en componente llamado ComponenteFormularioEditar)
+const handleEditarEventos = (d:InterfaceDatosEventos, index:number)=>{
+        setDatosEventos(d);
+        setIndexFila(index);
+    }
+
+la función handleEditarEventos se usa para preparar el formulario cuando se quiere 
+editar un evento existente. recibe como parámetros los datos del evento seleccionado y 
+su posición en la lista. primero carga esos datos en DatosEventos para que se muestren 
+en los campos del formulario listos para modificarse. luego guarda el índice con 
+setIndexFila para recordar qué posición se debe actualizar cuando se pulse guardar. así, 
+cuando se ejecute handleRegistrarEventos sabrá exactamente en qué posición de la lista 
+debe reemplazar los datos editados.
+
+como diferencia, en el componente de editar, se llama al siguiente componente:
+
+<ComponenteRecuperarDatosEditar traerDatos={handleEditarEventos}/>
+el cual recupera en forma de lista los datos de los eventos ya registrados,
+
+
+al final como return de los componentes, ambos retornan un formulario que como Diferencias
+en ComponenteRegistrarDatosEvento este utiliza los campos para 
+Registrar (inputs,textarea,select) y en ComponenteFormularioEditar se utilizan los campos
+para recuperar (o mejor dicho rellenar esos campos) con la informacion del evento que
+se quizo editar pero ambos componentes tienen esta funcion en comun
+
+onChange={(e)=>handleDatosEventos(e.currentTarget.name,e.currentTarget.value)}>
+
+sirve para que cada vez que el usuario escribe o cambia algo en un campo, se envíe 
+automáticamente el nombre del campo y su valor actual a la 
+función handleDatosEventos, así se actualiza el estado DatosEventos y se validan 
+los datos en tiempo real para mantener el formulario sincronizado y mostrar errores 
+si es necesario.
+
+-----------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------
+
+3-Componente Mostrar Datos
+
+El componente mostrar Datos es el principal componente que recupera los datos y los muestra
+al Usuario en page.tsx, mediante un return que devuele una tabla con la informacion
+correspondiente. 
+
+-----------------------------------------------------------------------------------------
+
+Estructura y logica:
+
+Este componente re utiliza las funciones y constantes definidas y explicadas anteriormente 
+en formulario Registrar/Eliminar, las cuales se mostraran a continuacion  
+
+    const miStorage = window.localStorage
+    const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+
+    useEffect(() => {
+        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+        if (ListaStr != null){
+            let ListaParse = JSON.parse(ListaStr)
+            setAlmacenarDatosEventos(ListaParse)
+        }
+    }, [])
+
+a partir de eso, en el return del componente, podemos retornar una tabla la cual tiene
+como contenido los datos Registrados/Editados almacenados en localStorage, todo gracias a 
+la funcion .map:
+
+return ( 
+        <>
+            <table>
+                <tbody>
+                    {
+                        AlmacenarDatosEventos.map((d, index)=>{
+                            return(
+                                <tr key={index}>
+                                    <td>NOMBRE DEL EVENTO: {d.nombreDelEvento}</td>
+                                    <td>CANTIDAD DE CUPOS: {d.cantidadDeCupos}</td>
+                                    <td>TIPO DE EVENTO: {d.tipoDelEvento}</td>
+                                    <td>INFORMACION DEL EVENTO: {d.informacionDelEvento}</td>
+                                    <td>FECHA DEL EVENTO: {d.fechaARealizarEvento}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+        </>
+    );
+
+esto lo que hace es que recorre cada Dato de evento registrado en AlmacenarDatosEventos (que
+es la funcion que almacena los datos en LocalStorage), como parametros devuelve "d", que
+significa Dato, y "index" que es la posicion de ese dato, retornando una lista con su
+dato de evento correspondiente, la cual cada vez que se Registra / Edita algun dato lo muestra
+automaticamente, ejemplo {d.nombreDelEvento} significa el dato almacenado del nombreDelEvento,
+y nombreDelEvento significa la posicion de ese dato en LocalStorage.
+
+-----------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------
+
+4- Componente Recuperar Datos (Editar y Eliminar)
+
+Estos componentes utilizan la misma estructura que Mostrar Datos, solo
+que son utilizadas para Validar si el usuario quiere realmente Editar o
+eliminar ese Dato del evento, pero cada una de estas tiene sus Diferencias
+
+-----------------------------------------------------------------------------------------
+
+Estructura, logica y diferencias:
+
+En el componente "ComponenteRecuperarDatosEditar" y al igual que el componente
+"ComponenteRecuperarDatosEliminar" tienen como igualdad, que reutilizan 
+los componentes de MostrarDatos los cuales fueron definidos y explicados
+anteriormente, a continuacion se mostraran: 
+
+    const miStorage = window.localStorage
+    const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+
+    useEffect(() => {
+        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+        if (ListaStr != null){
+            let ListaParse = JSON.parse(ListaStr)
+            setAlmacenarDatosEventos(ListaParse)
+        }
+    }, [])
+
+
+como diferencias tenemos que "ComponenteRecuperarDatosEditar" tiene una funcion
+definida como constante (booleano):
+
+const componenteEditar = (index: number) => {
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
+        if (confirmar) {
+            propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
+        }
+    };
+
+que primero le pregunta al usuario si Desea Editar ese
+Dato que selecciono y luego el resultado pasa por un if el cual valida si confirmar
+es true entonces se llama a propsDatos.traerDatos pasando como parámetros 
+los datos del evento en esa posición y su índice. esto funciona porque en la 
+interfaz TraerDatosProps se definió que traerDatos recibe un objeto de tipo 
+InterfaceDatosEventos y un número como índice mostrada a continuacion:
+
+
+import { InterfaceDatosEventos } from "./InterfaceDatosEventos"
+
+export interface TraerDatosProps{
+    traerDatos: (d: InterfaceDatosEventos, index: number) => void
+}
+
+Esto asegurando que la información se pase correctamente al componente padre. de esta forma, cuando se confirma 
+la edición, el formulario de edición carga los datos del evento seleccionado y 
+guarda la posición para actualizarlo correctamente cuando se pulse registrar. 
+
+<button
+  onClick={()=>componenteEditar(index)}>EDITAR
+</button>
+
+esta siendo al final de la tabla que recupera los datos, llamando a la constante
+definida anteriormente para que cuando el usuario presione el boton de actualizar,
+le muestre la validacion y dependiendo de eso, muestre y recupere los datos que
+fueron seleccionados
+
+
+
+y como Diferencias "ComponenteRecuperarDatosEliminar" reutiliza la misma funcion
+de "ComponenteRecuperarDatosEditar" para preguntarle al usuario si realmente quiere
+eliminar el Dato seleccionado,
+
+const componenteEliminar = (index: number) => {
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?")
+        if (confirmar) {
+            let nuevaLista = [...AlmacenarDatosEventos]
+            nuevaLista.splice(index, 1)
+            miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista))
+            setAlmacenarDatosEventos(nuevaLista)
+            window.location.reload()
+        }
+    };
+
+pero con la unica diferencia que crea una 
+copia de la lista usando [...] sobre AlmacenarDatosEventos (que esta contiene los
+datos almacenados de eventos en LocalStorage), luego usa splice para 
+eliminar el elemento en la posición indicada, después guarda la nueva lista 
+actualizada en localStorage con miStorage.setItem para que los cambios se mantengan 
+persistentes, también actualiza el estado AlmacenarDatosEventos 
+con setAlmacenarDatosEventos para reflejar la lista sin el evento eliminado
+y por ultimo recarga la página con window.location.reload() para actualizar la 
+vista y mostrar la lista sin el evento borrado (actualiza la pagina para que
+el componente "ComponenteMostrarDatos" escuche/lea, los datos modificados, sin
+los datos que fueron eliminados), así se asegura que la 
+eliminación sea clara, persistente y visible de inmediato para el usuario y el
+gestor de eventos.
+
+<button
+  onClick={()=>componenteEliminar(index)}>ELIMINAR
+</button>
+
+--comentar
