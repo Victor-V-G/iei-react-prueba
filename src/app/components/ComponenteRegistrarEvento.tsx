@@ -105,6 +105,7 @@ const ComponenteRegistrarDatosEvento = ()=> {
         miStorage.setItem("AlmacenarDatosEventos", JSON.stringify([...AlmacenarDatosEventos, DatosEventos]))
         registrarDatosEventos(DatosEventos).then(()=>{
             alert("Registrado con exito")
+            window.location.reload();
         }).catch((error)=>{
             alert("hubo un problema con el registro")
             console.log(error)
