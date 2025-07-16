@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos"
+import { registrarDatosEventos } from "../firebase/Promesas"
 
 const initialStateDatosEventos: InterfaceDatosEventos={
     nombreDelEvento: "",
@@ -100,8 +101,14 @@ const ComponenteRegistrarDatosEvento = ()=> {
         }
     }
 
-    const handleRegistrarEventos = () => {
+    const handleRegistrarEventos=()=>{
         miStorage.setItem("AlmacenarDatosEventos", JSON.stringify([...AlmacenarDatosEventos, DatosEventos]))
+        registrarDatosEventos(DatosEventos).then(()=>{
+            alert("Registrado con exito")
+        }).catch((error)=>{
+            alert("hubo un problema con el registro")
+            console.log(error)
+        })
     }
 
     return (
@@ -153,7 +160,9 @@ const ComponenteRegistrarDatosEvento = ()=> {
             <br />
             <button
                 disabled={!(validarNombreDelEvento && validarCantidadDeCupos && validarTipoDelEvento && validarInformacionDelEvento && validarFechaARealizarEvento)}
-                onClick={()=>handleRegistrarEventos()}> REGISTRAR EVENTO
+                onClick={(e)=>{
+                    e.preventDefault();
+                    handleRegistrarEventos();}}> REGISTRAR EVENTO
             </button> <br />
 
         </form>
