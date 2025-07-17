@@ -4,30 +4,34 @@ import ComponenteFormularioEditarDatos from '../components/ComponenteFormularioE
 import './modals.styles.css'
 import styles from '../page.module.css'
 
+
 const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
-  
+
   const [hayDatos, setHayDatos] = useState(false)
-
+  
   useEffect(() => {
-    if (isOpen != false) 
+    if (isOpen != false) {
       return
-        const miStorage = window.localStorage
-        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-        let ListaParse = []
+    } else {
+      const miStorage = window.localStorage
+      let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
+      let ListaParse = []
 
-        if (ListaStr != null) {
-          ListaParse = JSON.parse(ListaStr)
-        } else {
-          ListaParse = []
-        }
-    
-        if (ListaParse.length > 0) {
-          setHayDatos(true)
-        } else {
-          setHayDatos(false)
-        }
+      if (ListaStr != null) {
+        ListaParse = JSON.parse(ListaStr)
+      } else {
+        ListaParse = []
+      }
+
+      if (ListaParse.length > 0) {
+        setHayDatos(true)
+      } else {
+        setHayDatos(false)
+      }
+    }
 
   }, [isOpen])
+
 
   if (isOpen != true){
     return null
