@@ -3,35 +3,31 @@ import { InterfaceModalsProps } from '../interfaces/InterfaceModalsProps'
 import ComponenteFormularioEditarDatos from '../components/ComponenteFormularioEditarDatos'
 import './modals.styles.css'
 import styles from '../page.module.css'
-
+import { InterfaceDatosEventos } from '../interfaces/InterfaceDatosEventos'
+import { obtenerDatosEventos } from '../firebase/Promesas'
 
 const ModalsEditar = ({ isOpen, closeModal }: InterfaceModalsProps) => {
 
+  const [ObtenerListadoValidar, setObtenerListadoValidar] = useState<InterfaceDatosEventos[]>([])
   const [hayDatos, setHayDatos] = useState(false)
   
   useEffect(() => {
-    if (isOpen != false) {
-      return
-    } else {
-      const miStorage = window.localStorage
-      let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-      let ListaParse = []
+    obtenerDatosEventos().then((listadoObtenido)=>{
+      setObtenerListadoValidar(listadoObtenido)
+    }).catch((error)=>{
+      alert("no se pudo cargar los datos")
+      console.log(error)
+    })
+  }, [])
 
-      if (ListaStr != null) {
-        ListaParse = JSON.parse(ListaStr)
-      } else {
-        ListaParse = []
-      }
-
-      if (ListaParse.length > 0) {
+  useEffect(() => {
+      if(ObtenerListadoValidar.length > 0){
         setHayDatos(true)
       } else {
         setHayDatos(false)
       }
-    }
-
-  }, [isOpen])
-
+    }, [ObtenerListadoValidar])
+  
 
   if (isOpen != true){
     return null
