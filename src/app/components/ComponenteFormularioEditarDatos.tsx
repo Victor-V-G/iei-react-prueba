@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react"
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos"
 import ComponenteRecuperarDatosEditar from "./ComponenteRecuperarDatosEditar"
+import { editarDatosEventos, obtenerID } from "../firebase/Promesas"
+import { InterfaceID } from "../interfaces/InterfaceID"
+
 
 const initialStateDatosEventos: InterfaceDatosEventos={
     nombreDelEvento: "",
@@ -16,7 +19,9 @@ const ComponenteFormularioEditarDatos = ()=> {
     const miStorage = window.localStorage
     const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
-    const [indexFila, setIndexFila] = useState<number | null>(null);
+    const [indexFila, setIndexFila] = useState(Number)
+    const [AlmacenarIDS, setAlmacenarIDS] = useState<InterfaceID[]>([])
+
 
     const [MostrarErrorNombreDelEvento, setMostrarErrorNombreDelEvento] = useState("")
     const [MostrarErrorCantidadDeCupos, setMostrarErrorCantidadDelEvento] = useState("")
@@ -38,6 +43,7 @@ const ComponenteFormularioEditarDatos = ()=> {
         }
     }, [])
     
+
 
     const handleDatosEventos = (name: string, value: string) => {
         const nuevoDatos = { ...DatosEventos, [name]: value }
@@ -103,27 +109,36 @@ const ComponenteFormularioEditarDatos = ()=> {
         }
     }
 
-    const handleRegistrarEventos = () => {
-        let nuevaLista = [...AlmacenarDatosEventos]
-        if (indexFila !== null) {
-            nuevaLista[indexFila] = DatosEventos;
-        }
-        setAlmacenarDatosEventos(nuevaLista);
-        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista));
-        setDatosEventos(initialStateDatosEventos);
-        setIndexFila(null);
-    }
 
     const handleEditarEventos = (d:InterfaceDatosEventos, index:number)=>{
         setDatosEventos(d);
         setIndexFila(index);
     }
 
+    useEffect(() => {
+        obtenerID().then((ids) => {
+            setAlmacenarIDS(ids)
+        console.log("Listado de IDs:", ids)
+        })
+    }, [])    
+
+    const poscicion = AlmacenarIDS.slice(indexFila, indexFila + 1)
+
+    const handleRegistrarEventos = () => {
+        editarDatosEventos(poscicion[0], DatosEventos).then(()=>{
+            alert("editado con exito")
+            window.location.reload();
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
+
     return (
         <div>
 
             <ComponenteRecuperarDatosEditar traerDatos={handleEditarEventos}/>
-
+            
             <form>
                 <h1>CAMPOS A EDITAR</h1>
                 <label>NOMBRE DEL EVENTO</label> <br />
@@ -174,12 +189,15 @@ const ComponenteFormularioEditarDatos = ()=> {
                 <br />
                 <button
                     disabled={!(validarNombreDelEvento && validarCantidadDeCupos && validarTipoDelEvento && validarInformacionDelEvento && validarFechaARealizarEvento)}
-                    onClick={()=>handleRegistrarEventos()}> ACTUALIZAR
+                    onClick={(e)=>{
+                        e.preventDefault();
+                        handleRegistrarEventos();}}> ACTUALIZAR
                 </button> <br />
             </form>
 
         </div>
     )
+
 }
 
 export default ComponenteFormularioEditarDatos;

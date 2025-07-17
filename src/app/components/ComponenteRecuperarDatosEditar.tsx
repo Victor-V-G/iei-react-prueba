@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
 import { TraerDatosProps } from "../interfaces/InterfaceTraerDatosProps";
 import { obtenerDatosEventos } from "../firebase/Promesas";
+import { obtenerID } from "../firebase/Promesas";
 
 export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
@@ -18,11 +19,14 @@ export const ComponenteRecuperarDatosEditar = (propsDatos:TraerDatosProps) =>{
         })
     }, [])
 
+
+
     const componenteEditar = (index: number) => {
         const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
         if (confirmar) {
             propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
         }
+
     };
 
 
