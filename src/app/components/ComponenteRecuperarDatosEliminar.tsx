@@ -3,18 +3,18 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
-
+import { obtenerDatosEventos } from "../firebase/Promesas";
 
 export const ComponenteRecuperarDatosEliminar = () =>{
-    const miStorage = window.localStorage
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
 
     useEffect(() => {
-        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-        if (ListaStr != null){
-            let ListaParse = JSON.parse(ListaStr)
-            setAlmacenarDatosEventos(ListaParse)
-        }
+        obtenerDatosEventos().then((listadoObtenido)=>{
+            setAlmacenarDatosEventos(listadoObtenido)
+        }).catch((error)=>{
+            alert("no se pudo cargar los datos")
+            console.log(error)
+        })
     }, [])
 
     const componenteEliminar = (index: number) => {
@@ -22,7 +22,6 @@ export const ComponenteRecuperarDatosEliminar = () =>{
         if (confirmar) {
             let nuevaLista = [...AlmacenarDatosEventos]
             nuevaLista.splice(index, 1)
-            miStorage.setItem("AlmacenarDatosEventos", JSON.stringify(nuevaLista))
             setAlmacenarDatosEventos(nuevaLista)
             window.location.reload()
         }

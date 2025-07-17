@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos"
 import { registrarDatosEventos } from "../firebase/Promesas"
 
@@ -13,9 +13,8 @@ const initialStateDatosEventos: InterfaceDatosEventos={
 }
 
 const ComponenteRegistrarDatosEvento = ()=> {
-    const miStorage = window.localStorage
+
     const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
-    const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
 
     const [MostrarErrorNombreDelEvento, setMostrarErrorNombreDelEvento] = useState("")
     const [MostrarErrorCantidadDeCupos, setMostrarErrorCantidadDelEvento] = useState("")
@@ -28,14 +27,6 @@ const ComponenteRegistrarDatosEvento = ()=> {
     const [validarTipoDelEvento, setValidarTipoDelEvento] = useState(false)
     const [validarInformacionDelEvento, setValidarInformacionDelEvento] = useState(false)
     const [validarFechaARealizarEvento, setValidarFechaARealizarEvento] = useState(false)
-
-    useEffect(() => {
-        let ListaStr = miStorage.getItem("AlmacenarDatosEventos")
-        if (ListaStr != null){
-            let ListaParse = JSON.parse(ListaStr)
-            setAlmacenarDatosEventos(ListaParse)
-        }
-    }, [])
 
     const handleDatosEventos = (name: string, value: string) => {
         const nuevoDatos = { ...DatosEventos, [name]: value }
@@ -102,7 +93,6 @@ const ComponenteRegistrarDatosEvento = ()=> {
     }
 
     const handleRegistrarEventos=()=>{
-        miStorage.setItem("AlmacenarDatosEventos", JSON.stringify([...AlmacenarDatosEventos, DatosEventos]))
         registrarDatosEventos(DatosEventos).then(()=>{
             alert("Registrado con exito")
             window.location.reload();
