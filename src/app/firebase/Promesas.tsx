@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, getDocs, updateDoc } from "firebase/firestore";
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./Conexion";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
 import { InterfaceID } from "../interfaces/InterfaceID";
@@ -51,6 +51,12 @@ export const editarDatosEventos = async(id:InterfaceID,nuevosDatos:InterfaceDato
         informacionDelEvento: nuevosDatos.informacionDelEvento,
         fechaARealizarEvento: nuevosDatos.fechaARealizarEvento
     });
+    console.log("Documento actualizado con ID:", id.idDocumento);
+}
+
+
+export const eliminarDatosEventos = async(id:InterfaceID)=>{
+    await deleteDoc(doc(db, "AlmacenarDatosEventos", id.idDocumento));
     console.log("Documento actualizado con ID:", id.idDocumento);
 }
 

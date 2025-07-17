@@ -3,10 +3,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos";
+import { TraerDatosProps } from "../interfaces/InterfaceTraerDatosProps";
 import { obtenerDatosEventos } from "../firebase/Promesas";
 
-export const ComponenteRecuperarDatosEliminar = () =>{
+
+export const ComponenteRecuperarDatosEliminar = (propsDatos:TraerDatosProps) =>{
     const [AlmacenarDatosEventos, setAlmacenarDatosEventos] = useState<InterfaceDatosEventos[]>([])
+
 
     useEffect(() => {
         obtenerDatosEventos().then((listadoObtenido)=>{
@@ -18,14 +21,13 @@ export const ComponenteRecuperarDatosEliminar = () =>{
     }, [])
 
     const componenteEliminar = (index: number) => {
-        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?")
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
         if (confirmar) {
-            let nuevaLista = [...AlmacenarDatosEventos]
-            nuevaLista.splice(index, 1)
-            setAlmacenarDatosEventos(nuevaLista)
-            window.location.reload()
+            propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
         }
+
     };
+
 
     return ( 
         <>

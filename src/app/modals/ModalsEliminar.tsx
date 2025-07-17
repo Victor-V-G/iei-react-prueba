@@ -5,6 +5,7 @@ import ComponenteRecuperarDatosEliminar from '../components/ComponenteRecuperarD
 import './modals.styles.css'
 import { InterfaceDatosEventos } from '../interfaces/InterfaceDatosEventos'
 import { obtenerDatosEventos } from '../firebase/Promesas'
+import ComponenteEliminar from '../components/ComponenteEliminar'
 
 const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
 
@@ -36,7 +37,7 @@ const ModalsEliminar = ({isOpen, closeModal}: InterfaceModalsProps) => {
         <div className="ModalsBox">
           <div className="ModalsContent">
             <h1>MENÚ ELIMINAR</h1>
-            <ComponenteRecuperarDatosEliminar/>
+            <ComponenteEliminar/>
             <button onClick={closeModal}>Cerrar</button>
           </div>
         </div>
