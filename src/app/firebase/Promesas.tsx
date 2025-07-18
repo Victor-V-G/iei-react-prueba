@@ -57,7 +57,7 @@ export const editarDatosEventos = async(id:InterfaceID,nuevosDatos:InterfaceDato
 
 export const eliminarDatosEventos = async(id:InterfaceID)=>{
     await deleteDoc(doc(db, "AlmacenarDatosEventos", id.idDocumento));
-    console.log("Documento actualizado con ID:", id.idDocumento);
+    console.log("Documento Eliminado con ID:", id.idDocumento);
 }
 
 

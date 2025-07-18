@@ -21,7 +21,7 @@ export const ComponenteRecuperarDatosEliminar = (propsDatos:TraerDatosProps) =>{
     }, [])
 
     const componenteEliminar = (index: number) => {
-        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA EDITAR ESTE EVENTO?");
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?");
         if (confirmar) {
             propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
         }

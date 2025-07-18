@@ -119,6 +119,9 @@ const ComponenteFormularioEditarDatos = ()=> {
         obtenerID().then((ids) => {
             setAlmacenarIDS(ids)
         console.log("Listado de IDs:", ids)
+        }).catch((error)=>{
+            alert("Error, no se pudo recuperar las IDS")
+            console.log(error)
         })
     }, [])    
 

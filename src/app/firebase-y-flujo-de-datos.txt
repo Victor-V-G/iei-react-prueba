@@ -1,0 +1,553 @@
+
+-----------------------------------------------------------------------------------------
+
+ARCHIVO LLAMADO: firebase
+
+este contiene los datos mas importante para realizar la conexion a la base de datos de firebase,
+
+-----------------------------------------------------------------------------------------
+
+CONTENIDO: Conexion.tsx , Credenciales.tsx , Promesas.tsx
+
+-----------------------------------------------------------------------------------------
+
+Conexion.tsx: 
+
+en este componente se inicializa la base de datos exportando dependencias, las que fueron previamente
+instaladas con el comando en CMD: npm install firebase, dentro del directorio donde se tiene el proyecto.
+
+tambien aqui se copia y pega la configuracion del SDK proporcionada por firebase
+
+-----------------------------------------------------------------------------------------
+
+Credenciales.tsx:
+
+aqui se exporta la constante que contiene los datos sensibles de la base de datos, los cuales
+son los que serviran para comunicarse desde el proyecto a la base de datos de firebase
+
+-----------------------------------------------------------------------------------------
+
+Promesas.tsx:
+
+aqui es donde se crean las promesas, las promesas son componentes que llaman o ejecutan funciones asincronas,
+estas realizaran una accion pero que lo harán en el futuro, ya sea con un resultado exitoso o con un error. 
+Es ya que son operaciones que tardan, como en este caso llamar a la base de datos de firebase
+
+Promesas Aplicadas: registrarDatosEventos (agregar), obtenerDatosEventos (leer/recuperar), obtenerID (recuperar IDS de documentos),
+editarDatosEventos (editar), eliminarDatosEventos (eliminar)
+
+-----------------------------------------------------------------------------------------
+
+registrarDatosEventos:
+
+la funcion registrarDatosEventos es una promesa asincrona que realiza la tarea de registrar un nuevo documento en
+firebase:
+
+export const registrarDatosEventos = async(d:InterfaceDatosEventos)=> {
+    // Add a new document with a generated id.
+    const docRef = await addDoc(collection(db, "AlmacenarDatosEventos"), d);
+    console.log("Document written with ID: ", docRef.id);
+}
+
+esta se exporta para ser llamada en los componentes, async indica que la funcion es asincrona es decir que es una promesa,
+la promesa recibe parametros de entrada, "d" es un objeto que sigue la estructura tipada de InterfaceDatosEventos (la 
+cual contiene los datos y campos de los datos que se quieren registrar).
+
+despues se declara como constante "docRef" que esta sirve para almacenar el resultado de la promesa.
+
+"await" pausa la ejecucion hasta que se complete la promesa "addDoc"
+
+"addDoc" es una funcion de firebase que agrega un nuevo documento a una coleccion, la cual crea un ID unico automaticamente para
+cada documento agregado
+
+"(collection(db, "AlmacenarDatosEventos"), d)", "collection" define a que coleccion de firebase se agregara el documento, "db" es
+la instancia de firestore (osea es la conexion), "AlmacenarDatosEventos" aqui se indica que los datos se almacenaran en la coleccion
+llamada "AlmacenarDatosEventos", ", d" es el contenido del documento que se va a guardar, "d" es el objeto que se recibe como
+parametro y este se guarda tal cual en firebase
+
+console.log("Document written with ID: ", docRef.id); muestra en consola la id del documento que se acaba de generar
+
+-----------------------------------------------------------------------------------------
+
+obtenerDatosEventos:
+
+la funcion obtenerDatosEventos es una promesa asincrona que realiza la tarea de leer/obtener todos los 
+documentos de firebase:
+
+export const obtenerDatosEventos = async()=>{
+    let listadoObtenido:InterfaceDatosEventos[] = []
+        const querySnapshot = await getDocs(collection(db, "AlmacenarDatosEventos"));
+        querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        let DatosEventos:InterfaceDatosEventos = {
+            nombreDelEvento: doc.data().nombreDelEvento,
+            cantidadDeCupos: doc.data().cantidadDeCupos,
+            tipoDelEvento: doc.data().tipoDelEvento,
+            informacionDelEvento: doc.data().informacionDelEvento,
+            fechaARealizarEvento: doc.data().fechaARealizarEvento
+        }
+        listadoObtenido.push(DatosEventos)
+        console.log(doc.id, " => ", doc.data());
+        });
+return listadoObtenido
+}
+
+esta se exporta para ser llamada en los componentes, async indica que la funcion es asincrona es decir que 
+es una promesa, esta no recibe parametros de entrada
+
+"let listadoObtenido:InterfaceDatosEventos[] = []" se declara un arreglo vacio llamado "listadoObtenido", la cual
+sigue la estructura tipada de InterfaceDatosEventos la cual el "[]" a su lado permite que listadoObtenido obtenga un arreglo de objetos,
+el cual este arreglo servira para almacenar los datos obtenidos en firebase
+
+"const querySnapshot = await getDocs(collection(db, "AlmacenarDatosEventos"));", se declara como constante "querySnapshot" que esta sirve 
+para almacenar todos los documentos obtenidos
+
+"await" pausa la ejecucion hasta que se complete la promesa "getDocs"
+
+"getDocs" es una funcion de firebase que obtiene todos documento de una coleccion
+
+"(collection(db, "AlmacenarDatosEventos"))", "collection" define a que coleccion de firebase se leera/obtendra el documento, "db" es
+la instancia de firestore (osea es la conexion), "AlmacenarDatosEventos" aqui se indica que se leeran/obtendran los datos de esa coleccion
+especifica
+
+
+"querySnapshot.forEach((doc) => {})" se recorre "querySnapshot" (la constante que declaramos que almacena los documentos obtenidos) con un 
+bucle "forEach", "doc" representando cada documento individual obtenido de la coleccion
+
+"let DatosEventos:InterfaceDatosEventos = {
+            nombreDelEvento: doc.data().nombreDelEvento,
+            cantidadDeCupos: doc.data().cantidadDeCupos,
+            tipoDelEvento: doc.data().tipoDelEvento,
+            informacionDelEvento: doc.data().informacionDelEvento,
+            fechaARealizarEvento: doc.data().fechaARealizarEvento
+        }"
+
+dentro del bucle, se crea un objeto llamado DatosEventos que sigue la estructura tipada de InterfaceDatosEventos, donde cada campo
+se extrae mediante "doc.data()" que es el contenido del documento en firebase 
+
+"listadoObtenido.push(DatosEventos)" aqui se agrega mediante push el objeto definido dentro del bucle "DatosEventos" al arreglo
+definido al principio de la promesa "listadoObtenido"
+
+"console.log(doc.id, " => ", doc.data());" muestra por consola el ID del documento y sus datos
+
+"return listadoObtenido;" finalmente se retorna el arreglo listadoObtenido con todos los eventos recuperados
+
+-----------------------------------------------------------------------------------------
+
+obtenerID:
+
+la funcion obtenerID es una promesa asincrona que realiza la tarea de leer/obtener todos las ID de los documentos en la coleccion:
+
+export const obtenerID = async()=>{
+    let idsDocumento:InterfaceID[] = []
+        const querySnapshot = await getDocs(collection(db, "AlmacenarDatosEventos"));
+        querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        let idDocumentoObtenido:InterfaceID = {
+           idDocumento: doc.id
+        }
+        idsDocumento.push(idDocumentoObtenido)
+        console.log("ID obtenida:", doc.id)
+        });
+return idsDocumento
+}
+
+Esta se exporta para ser llamada en los componentes. async indica que la función es asincrónica, es decir, que es una promesa, 
+y no recibe parámetros de entrada.
+
+"let idsDocumento:InterfaceID[] = []" Se declara un arreglo vacío llamado idsDocumento, el cual sigue la estructura tipada de InterfaceID. 
+El uso de [] indica que se trata de un arreglo de objetos. Este arreglo será usado para almacenar los ID de 
+los documentos obtenidos desde Firebase
+
+"const querySnapshot = await getDocs(collection(db, "AlmacenarDatosEventos"));", se declara como constante "querySnapshot" que esta sirve 
+para almacenar todos los documentos obtenidos
+
+"await" pausa la ejecucion hasta que se complete la promesa "getDocs"
+
+"getDocs" es una funcion de firebase que obtiene todos documento de una coleccion
+
+"(collection(db, "AlmacenarDatosEventos"))", "collection" define a que coleccion de firebase se leera/obtendra el documento, "db" es
+la instancia de firestore (osea es la conexion), "AlmacenarDatosEventos" aqui se indica que se leeran/obtendran los datos de esa coleccion
+especifica
+
+"querySnapshot.forEach((doc) => {})" se recorre "querySnapshot" (la constante que declaramos que almacena los documentos obtenidos) con un 
+bucle "forEach", "doc" representando cada documento individual obtenido de la coleccion
+
+
+"let idDocumentoObtenido:InterfaceID = {
+           idDocumento: doc.id
+        }"
+
+dentro del bucle se crea un objeto llamado idDocumentoObtenido, que sigue la estructura tipada InterfaceID donde el campo
+de la IDs de los documentos se extrae mediante "doc.data()" que es el contenido del documento en firebase, (practicamente reutilizando el codigo
+de obtenerDatosEventos para obtener las IDs)
+
+"idsDocumento.push(idDocumentoObtenido)" aqui se agrega mediante push el objeto definido dentro del bucle "idDocumentoObtenido" al arreglo
+definido al principio de la promesa "idsDocumento"
+
+"return idsDocumento;" finalmente se retorna el arreglo idsDocumento con todas las IDs recuperadas
+
+-----------------------------------------------------------------------------------------
+
+editarDatosEventos:
+
+la funcion editarDatosEventos es una promesa asincrona que realiza la tarea de editar/actualizar un documento existente
+
+export const editarDatosEventos = async(id:InterfaceID,nuevosDatos:InterfaceDatosEventos)=>{
+    const docRef = doc(db, "AlmacenarDatosEventos", id.idDocumento);
+    await updateDoc(docRef, {
+        nombreDelEvento: nuevosDatos.nombreDelEvento,
+        cantidadDeCupos: nuevosDatos.cantidadDeCupos,
+        tipoDelEvento: nuevosDatos.tipoDelEvento,
+        informacionDelEvento: nuevosDatos.informacionDelEvento,
+        fechaARealizarEvento: nuevosDatos.fechaARealizarEvento
+    });
+    console.log("Documento actualizado con ID:", id.idDocumento);
+}
+
+esta se exporta para ser llamada en los componentes, async indica que la funcion es asincrona es decir que es una promesa,
+la promesa recibe dos parametros de entrada:
+
+"id" es un objeto que sigue la estructura tipada de InterfaceID, el cual contiene el ID del documento que se desea editar.
+
+"nuevosDatos" es un objeto que sigue la estructura tipada de InterfaceDatosEventos que contiene los nuevos valores que 
+se desean actualizar en el documento.
+
+
+"const docRef = doc(db, "AlmacenarDatosEventos", id.idDocumento);" se declara como constante "docRef" que sirve para referenciar el documento 
+especifico dentro de la colección.
+
+"doc" es una función de Firebase que permite acceder directamente a un documento por su ID.
+
+"db" es la instancia de firestore (osea es la conexion).
+
+"AlmacenarDatosEventos" es el nombre de la colección donde se encuentra el documento.
+
+"id.idDocumento" es el identificador único del documento que se desea actualizar, practicamente "idDocumento" accede al valor string del "id", ya 
+que "id" es un objeto
+
+
+"await updateDoc(docRef, {})" pausa la ejecución hasta que se complete la promesa "updateDoc"
+
+"updateDoc" es una función de firebase que permite actualizar los campos de un documento existente
+
+"await updateDoc(docRef, {
+        nombreDelEvento: nuevosDatos.nombreDelEvento,
+        cantidadDeCupos: nuevosDatos.cantidadDeCupos,
+        tipoDelEvento: nuevosDatos.tipoDelEvento,
+        informacionDelEvento: nuevosDatos.informacionDelEvento,
+        fechaARealizarEvento: nuevosDatos.fechaARealizarEvento
+    });"
+
+dentro del objeto {} (despues de docRef) se colocan los campos que se desean actualizar, y los valores se extraen desde el parámetro "nuevosDatos"
+
+console.log("Documento actualizado con ID:", id.idDocumento); muestra en consola el ID del documento que fue actualizado exitosamente.
+
+-----------------------------------------------------------------------------------------
+
+eliminarDatosEventos:
+
+la funcion eliminarDatosEventos es una promesa asincrona que realiza la tarea de eliminar un documento específico
+
+export const eliminarDatosEventos = async(id:InterfaceID)=>{
+    await deleteDoc(doc(db, "AlmacenarDatosEventos", id.idDocumento));
+    console.log("Documento actualizado con ID:", id.idDocumento);
+}
+
+esta se exporta para ser llamada en los componentes, async indica que la funcion es asincrona es decir que es una promesa,
+la promesa recibe un parametro de entrada:
+
+"id" es un objeto que sigue la estructura tipada de InterfaceID, el cual contiene el ID del documento que se desea eliminar.
+
+
+"await deleteDoc(doc(db, "AlmacenarDatosEventos", id.idDocumento));": "await" pausa la ejecución hasta que se complete la promesa deleteDoc,
+
+"deleteDoc" es una función de firebase que elimina un documento de una colección, siempre y cuando se le indique la 
+referencia exacta del documento a eliminar.
+
+"doc" es una función de Firebase que permite acceder directamente a un documento por su ID.
+
+"db" es la instancia de firestore (osea es la conexion).
+
+"AlmacenarDatosEventos" es el nombre de la colección donde se encuentra el documento.
+
+"id.idDocumento" es el identificador único del documento que se desea eliminar, practicamente "idDocumento" accede al valor string del "id", ya 
+que "id" es un objeto
+
+"console.log("Documento Eliminado con ID:", id.idDocumento);"
+muestra en consola el ID del documento que fue eliminado exitosamente
+
+-----------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------
+
+Componentes modificados: ComponenteRegistrarEvento, ComponenteMostrarDatos, ComponenteRecuperarDatosEditar,
+ComponenteFormularioEditarDatos, ComponenteRecuerarDatosEliminar, y se agrego un nuevo componente: ComponenteEliminar.
+
+(recalcar que ahora ningun componente utiliza localStorage, todo se maneja mediante firebase)
+
+-----------------------------------------------------------------------------------------
+
+ComponenteRegistrarEvento:
+
+Este componente mantiene la misma estructura del definida en anteriormente solo que se elimino las funciones y hooks que almacenaban
+datos en localStorage, las cuales fueron reemplazadas por esta:
+
+    const handleRegistrarEventos=()=>{
+        registrarDatosEventos(DatosEventos).then(()=>{
+            alert("Registrado con exito")
+            window.location.reload();
+        }).catch((error)=>{
+            alert("hubo un problema con el registro")
+            console.log(error)
+        })
+    }
+
+esta constante handleRegistrarEvento se ejecuta cuando dan click en el boton del formulario registrar,
+llama a la promesa de registrarDatosEventos definida anteriormente, la cual recibe como parametros DatosEventos que fueron
+definidos anteriormente en "flujo-de-datos.txt", despues con .then que se ejecuta cuando la promesa se resuelve exitosamente.
+Permite hacer algo con el resultado de la operación, en este caso que reinicie el navegador para que otros componentes reciban los nuevos
+datos, con .catch este se ejecuta solamente si la promesa es rechazada, es decir, si ocurre un error dentro de la operación asincrónica, entonces
+catch tiene como funcion registrar los errores, avisarle al usuario que hubo un problema con el registro y en la consola indicar cual fue el
+error.
+
+-----------------------------------------------------------------------------------------
+
+ComponenteMostrarDatos:
+
+este componente mantiene la misma estructura del definida en anteriormente solo que se elimino las funciones y hooks que recuperaban
+datos en localStorage, las cuales fueron reemplazadas por esta:
+
+    useEffect(() => {
+        obtenerDatosEventos().then((listadoObtenido)=>{
+            setAlmacenarDatosEventos(listadoObtenido)
+        }).catch((error)=>{
+            alert("no se pudo cargar los datos")
+            console.log(error)
+        })
+    }, [])
+
+este useEffect se ejecuta apenas se monta el componente de "ComponenteMostrarDatos" el cual llama a la promesa de obtenerDatosEventos,
+la cual no recibe parametros, con .then si la promesa se resuelve correctamente se recibe como resultado un array con los datos listadoObtenido
+(que lo definimos con return en la promesa anteriormente), luego con el setAlmacenarDatosEventos (que es una constante de useState definida
+anteriormente en "flujo-de-datos.txt") guardamos ese array obtenido de "listadoObtenido" y mediante el setAlmacenarDatosEventos cambiamos 
+el estado de "AlmacenarDatosEventos" por listadoObtenido, de esta manera recuperando siempre los datos ingresados, editados, eliminados y
+siendo mostrada al usuario por medio del return del "ComponenteMostrarDatos" (que fue definido en "flujo-de-datos.txt" anteriormente).
+
+-----------------------------------------------------------------------------------------
+
+ComponenteRecuperarDatosEditar:
+
+este componente mantiene la misma estructura del definida en anteriormente solo que se elimino las funciones y hooks que recuperaban
+datos en localStorage, las cuales fueron reemplazadas por esta:
+
+  useEffect(() => {
+        obtenerDatosEventos().then((listadoObtenido)=>{
+            setAlmacenarDatosEventos(listadoObtenido)
+        }).catch((error)=>{
+            alert("no se pudo cargar los datos")
+            console.log(error)
+        })
+    }, [])
+
+(practicamente es la misma utilizada anteriormente en ComponenteMostrarDatos, la cual fue definida anteriormente)
+
+-----------------------------------------------------------------------------------------
+
+ComponenteFormularioEditarDatos:
+
+este componente mantiene la misma estructura del definida en anteriormente solo que se elimino las funciones y hooks que recuperaban
+datos en localStorage, las cuales fueron reemplazadas por esta:
+
+const [AlmacenarIDS, setAlmacenarIDS] = useState<InterfaceID[]>([])
+
+esta constante con useState nos permite almacenar las ids de los documentos que fueron recuperadas, Este estado almacena un array 
+de objetos que cumplen con la estructura de la interfaz tipada "InterfaceID"
+
+
+    useEffect(() => {
+        obtenerID().then((ids) => {
+            setAlmacenarIDS(ids)
+        console.log("Listado de IDs:", ids)
+        }).catch((error)=>{
+            alert("Error, no se pudo recuperar las IDS")
+            console.log(error)
+        })
+    }, [])    
+
+(este useEffect practimante replica el mismo codigo y logica definidas en ComponenteMostrarDatos)
+
+
+const poscicion = AlmacenarIDS.slice(indexFila, indexFila + 1)
+
+la constante poscicion es una variable que sirve para obtener un único elemento de la constante AlmacenarIDS definida anteriormente, 
+utilizando un índice específico (indexFila) para determinar su ubicación, todo gracias .slice que sirve para obtener un dato especifico del
+array con las ids que fueron almacenados en AlmacenarIDS, indexFila es un componente reutilizado (que esta definido en "flujo-de-datos.txt"),
+el cual permitia recuperar o obtener el index especifico del boton que fue pulsado para editar ese dato, entonces gracias a indexFila,
+podemos aplicar la logica que, las IDS de los documentos (y documentos) que fueron registrados y almacenados en firebase se ordenan en un orden 
+diferente cada vez que se agrega un dato nuevo, por lo que gracias al indexFila siempre se podra recuperar la poscicion ese dato especifico, ya que
+el boton siempre acompaña al dato/documento que se recupero de firebase, sabiendo que AlmacenarIDS siempre recupera todas las ids de la coleccion
+llamada y definida "AlmacenarDatosEventos" cada vez que se agregue un dato nuevo o se borre uno, al reiniciar la pagina automaticamente, recupera de nuevo una nueva 
+lista con todas las IDs de los documentos actuales en firebase, de este modo si se cambia la poscicion de un documento siempre se obtendra su id
+respectivamente.
+
+entonces gracias a slice dentro del array con todas las ids recuperadas, podemos hacer que el evento que se quiere editar presionando su respectivo
+boton obtenga indexFila su indice, y como sabemos que el array de las IDS va a la par con el orden de datos recuperados, podemos hacer que
+slice corte/obtenga el array solamente de la ID que esta en la poscicion que se obtiene gracias a indexFila, este array recuperado con slice de 
+una la id unica que queremos se almacena en la constante "poscicion".
+
+una vez obtenida la id del dato que se quiere editar pasamos a la siguiente constante:
+
+    const handleRegistrarEventos = () => {
+        editarDatosEventos(poscicion[0], DatosEventos).then(()=>{
+            alert("editado con exito")
+            window.location.reload();
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
+esta constante se ejecuta al dar click en el boton de actualiar (que se habilita cuando se modifica un campo) la cual llama a la promesa
+anteriormente definida y explicada "editarDatosEventos" la cual recibe como parametros la "poscicion" (osea la ID del documento que se quiere
+editar) y "DatosEventos" la cual almacena los datos que el usuario modifico previamente, poscicion[0] significa que, dentro de poscicion tenemos
+un array con la id del documento que se quiere editar, pero como es un array debemos indicarle la poscicion de ese dato (la id) dentro
+de "poscicion" pero como sabemos que "poscicion" solo almacena como array unicamente la id del documento/evento que queremos editar le ponemos
+[0] indicando que siempre acceda al dato del indice 0 del array con la ID almacenado en "poscicion", despues con .then que se ejecuta cuando la promesa 
+se resuelve exitosamente, Permite hacer algo con el resultado de la operación, en este caso que reinicie el navegador para que otros componentes reciban los nuevos
+datos actualizados, y con .catch este se ejecuta solamente si la promesa es rechazada, es decir, si ocurre un error dentro de la operación asincrónica, entonces
+catch tiene como funcion registrar los errores, avisarle al usuario que hubo un problema con el registro y en la consola indicar cual fue el
+error.
+
+-----------------------------------------------------------------------------------------
+
+ComponenteRecuerarDatosEliminar:
+
+este componente mantiene la misma estructura del definida en anteriormente solo que se elimino las funciones y hooks que recuperaban
+datos en localStorage, las cuales fueron reemplazadas por esta:
+
+
+    useEffect(() => {
+        obtenerDatosEventos().then((listadoObtenido)=>{
+            setAlmacenarDatosEventos(listadoObtenido)
+        }).catch((error)=>{
+            alert("no se pudo cargar los datos")
+            console.log(error)
+        })
+    }, [])
+
+(practicamente es la misma utilizada anteriormente en ComponenteMostrarDatos, la cual fue definida anteriormente),
+
+tambien se agrego     
+
+    const componenteEliminar = (index: number) => {
+        const confirmar = window.confirm("¿ESTA SEGURO QUE DESEA ELIMINAR ESTE EVENTO?");
+        if (confirmar) {
+            propsDatos.traerDatos(AlmacenarDatosEventos[index], index)
+        }
+
+    };
+
+(que practicamente reutilizamos las funciones y componentes usados en ComponenteRecuperarDatosEditar pero esta vez para poder eliminar)
+
+estas modificaciones permiten que el ComponenteRecuerarDatosEliminar nos permita conocere el indice del boton presionado del evento que se
+quiere eliminar
+
+-----------------------------------------------------------------------------------------
+
+componenteEliminar
+
+este componente es nuevo, agregado para poder ejecutar funciones y llamar promesas para poder eliminar eventos almacenados en firebase,
+
+practicamente este componente replica la estructura y funciones del componente ComponenteFormularioEditarDatos, quitando de su estructura las validaciones
+y el formulario de ingreso de datos
+
+se adapto la constante:
+
+const [indexFila, setIndexFila] = useState<number>(-1)
+
+hace que indexfila almacene un dato tipo number y que este su valor inicial sea -1 (esto para eliminar los eventos que estan en la primera
+fila de los array ya que al ser index poscicion 0 al dar click al boton de eliminar este mantendra el index 0 por lo que no se detectaran
+cambios en el siguiente useEffect:)
+
+    useEffect(() => {
+        eliminarDatosEventos(poscicion[0]).then(()=>{
+            alert("eliminado con exito")
+            window.location.reload();
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }, [indexFila])
+
+el cual replica la misma logica del useEffect utilizado en ComponenteFormularioEditarDatos pero teniendo como dependencia indexFila, entonces
+cada vez que cambie el valor de indexFila (el cual solo cambia cuando se pulsa el respectivo boton de eliminar) se ejecuta el useEffect.
+
+esto nos sirve para solamente utilizar el boton del dato que se quiere eliminar, porque como componenteEliminar reutiliza el 
+codigo de ComponenteFormularioEditarDatos entonces simplemente llamamos al componente que muestra los eventos y su boton para eliminar dentro del
+return del componente.
+
+este componente "ComponenteEliminar" es llamado desde su respectivo modals
+
+aqui la estructura completa: 
+
+'use client'
+
+import { useState, useEffect } from "react"
+import { InterfaceDatosEventos } from "../interfaces/InterfaceDatosEventos"
+import { InterfaceID } from "../interfaces/InterfaceID"
+import ComponenteRecuperarDatosEliminar from "./ComponenteRecuperarDatosEliminar"
+import { obtenerID } from "../firebase/Promesas"
+import { eliminarDatosEventos } from "../firebase/Promesas"
+
+const initialStateDatosEventos: InterfaceDatosEventos={
+    nombreDelEvento: "",
+    cantidadDeCupos: 0,
+    tipoDelEvento: "",
+    informacionDelEvento: "",
+    fechaARealizarEvento: ""
+}
+
+const ComponenteEliminar = ()=> {
+    const [DatosEventos, setDatosEventos] = useState(initialStateDatosEventos)
+    const [indexFila, setIndexFila] = useState<number>(-1)
+    const [AlmacenarIDS, setAlmacenarIDS] = useState<InterfaceID[]>([])
+
+
+    const handleEliminarEventos = (d:InterfaceDatosEventos, index:number)=>{
+        setDatosEventos(d);
+        setIndexFila(index);
+    }
+
+    useEffect(() => {
+        obtenerID().then((ids) => {
+            setAlmacenarIDS(ids)
+        console.log("Listado de IDs:", ids)
+        })
+    }, [])    
+
+    const poscicion = AlmacenarIDS.slice(indexFila, indexFila + 1)
+
+
+    useEffect(() => {
+        eliminarDatosEventos(poscicion[0]).then(()=>{
+            alert("eliminado con exito")
+            window.location.reload();
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }, [indexFila])
+    
+
+    return (
+        <div>
+
+            <ComponenteRecuperarDatosEliminar traerDatos={handleEliminarEventos}/>
+
+        </div>
+    )
+
+}
+
+export default ComponenteEliminar;
+
+-----------------------------------------------------------------------------------------
